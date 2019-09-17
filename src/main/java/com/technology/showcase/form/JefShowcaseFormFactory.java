@@ -17,12 +17,19 @@ public class JefShowcaseFormFactory  extends FormFactory {
 			Form form = null;
 			// Выбираем форму в зависимости от имени
 			switch (name) {
-			case PERSON:
-				form = new PersonForm();
+			case ABOUT_ME:
+				form = new AboutMeForm();
 				break;
-			case PHONE:
-				form = new PhoneForm();
+			case ADDRESS:
+				form = new AddressForm();
 				break;
+			case MULTIPASS:
+				form = new MultiPassForm();
+				break;
+			case SPACESHIP:
+				form = new SpaceshipForm();
+				break;
+				
 			default:
 				throw new ServiceException("Form not found " + name, null);
 			}

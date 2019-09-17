@@ -13,19 +13,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.technology.scoring.jfrontoffice.server.field.HouseFieldNames.*;
-import static com.technology.scoring.jfrontoffice.server.field.AddressFieldNames.*;
+import static com.technology.showcase.dao.SpaceshipDao.*;
 import static java.util.Calendar.*;
 
 import com.technology.jef.server.exceptions.ServiceException;
 import com.technology.jef.server.dto.OptionDto;
 import com.technology.jef.server.dto.RecordDto;
-import com.technology.scoring.jfrontoffice.server.dao.AddressDao;
-import com.technology.scoring.jfrontoffice.server.dao.ApplicationSummaryDao;
-import com.technology.scoring.jfrontoffice.server.dao.CustomerDebtorJobDao;
-import com.technology.scoring.jfrontoffice.server.dao.KLADRDao;
-import com.technology.scoring.jfrontoffice.server.field.AddressFieldNames;
-import com.technology.scoring.jfrontoffice.server.field.ApplicationSummaryFieldNames;
 import com.technology.jef.server.form.Form;
 import com.technology.jef.server.form.FormData.Attribute;
 
@@ -33,36 +26,16 @@ import com.technology.jef.server.form.FormData.Attribute;
 * Interface "Address" controller
 */
 
-public class PersonForm extends Form {
+public class SpaceshipForm extends Form {
 
 	@Override
 	public Map<String, String> getParametersMap() {
 
 		return new HashMap<String, String>(){{
-			put("reg_section", REG_BLOCK);
-			put("how_long_living_here", ACTUAL_ADDRESS_LENGTH_OF_STAY);
-			put("housing_type_id", ACTUAL_RESIDENCE_PLACE_TYPE_ID);
-			put("real_house", ACTUAL_HOUSE_CODE);
-			put("real_and_reg_equals", REG_PLACE_SAME_ACTUAL_PLACE);
-			put("registration_date", REGISTRATION_DATE);
-			put("real_district_code", ACTUAL_DISTRICT_CODE);
-			put("real_settlement_code", ACTUAL_SETTLEMENT_CODE);
-			put("reg_district_code", REG_DISTRICT_CODE);
-			put("reg_city_code", REG_CITY_CODE);
-			put("reg_street_code", REG_STREET_CODE);
-			put("real_street_code", ACTUAL_STREET_CODE);
-			put("real_city_code", ACTUAL_CITY_CODE);
-			put("reg_settlement_code", REG_SETTLEMENT_CODE);
-			put("reg_apartment", REG_APARTMENT_NUMBER);
-			put("real_post_index", ACTUAL_POSTINDEX);
-			put("reg_region_code", REG_REGION_CODE);
-			put("real_apartment", ACTUAL_APARTMENT_NUMBER);
-			put("reg_building", REG_BUILDING);
-			put("real_building", ACTUAL_BUILDING);
-			put("real_region_code", ACTUAL_REGION_CODE);
-			put("reg_house", REG_HOUSE_CODE);
-			put("reg_post_index", REG_POSTINDEX);
-			put("real_section", ACTUAL_BLOCK);
+			put("spaceship_galaxy", SPACESHIP_GALAXY);
+			put("spaceship_planet", SPACESHIP_PLANET);
+			put("spaceship_factory", SPACESHIP_FACTORY);
+			put("engine_type", ENGINE_TYPE);
 
 		}};
 	}

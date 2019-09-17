@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<interface service="/JefShowcase/rest/form/" id="showcase" name="Showcase" api="SHOWCASE">
+       <forms >
+		<form id="showcase" >
+			<form_item type="info" width="1035px" height="120px" id="current_date" name="Currtent date" api="ABOUT_ME"/>
+
+			<group id="about_me" name="About me">
+				<form_item type="text"                         id="first_name"                 name="First name"                    width="355px"  api="ABOUT_ME"/>
+				<form_item type="text"                         id="last_name"                  name="Last name"                     width="355px"  api="ABOUT_ME"/>
+				<form_item type="short_radio_switch"           id="gender"                     name="Gender"                        width="129px"  api="ABOUT_ME"/>
+				<form_item type="checkbox"                     id="name_changed_upon_marriage" name="Name changed upon marriage"    width="201px"  api="ABOUT_ME"/>
+				<form_item type="text"                         id="birth_name"                 name="Birth name"                    width="355px"  api="ABOUT_ME" ajax_visible_parrent="customer_is_former_surname_exist"/>
+				<form_item type="auto_complete"                id="social_status_id"           name="Social status"                 width="303px"  api="ABOUT_ME"/>
+			</group>
+
+			<group id="address" name="Address" parrent_api="ABOUT_ME">
+				<form_item type="auto_complete_editable" id="galaxy"          name="Galaxy"	width="500px"	required="1" maxlength="255" api="ADDRESS"/>
+				<form_item type="auto_complete_editable" id="planet"          name="Planet"	width="500px"	required="1" maxlength="255" api="ADDRESS" ajax_list_parrent="galaxy"/>
+				<form_item type="auto_complete_editable" id="region"          name="region"	width="491px"	             maxlength="255" api="ADDRESS" ajax_list_parrent="planet"/>
+				<form_item type="number"                 id="reg_post_index"  name="ZIP" 	width="131px"   required="1" maxlength="6"   api="ADDRESS" ajax_value_parrent="galaxy,planet,region"/>
+			</group>
+
+
+			<group id="multipass" name="Multipass" parrent_api="ABOUT_ME">
+				<form_item type="short_radio_switch" id="has_multipass" width="736px" name="Has multipass" required="1"                 api="MULTIPASS"  ajax_value_parrent="multipass_id"/>
+				<form_item type="text"               id="multipass_id"  width="255px" name="multipass_id"  required="1"  maxlength="14" api="MULTIPASS"  ajax_visible_parrent="has_multipass">
+					<script type="blur"><![CDATA[
+	        			var rn = this.value; 
+		        		if (rn.match(/\w-\d{7}/)) {
+		        			if (!confirm('Are you sure?')) {
+								this.focus();
+							};
+						}
+					]]></script>
+				</form_item>
+			</group>
+
+			<group id="spaceships" name="Spaceship" is_multiplie="true" parrent_api="ABOUT_ME" api="SPACESHIP">
+				<form_item type="auto_complete_editable" id="spaceship_galaxy"          name="Production galaxy"	width="500px"	required="1" maxlength="255" />
+				<form_item type="auto_complete_editable" id="spaceship_planet"          name="Production planet"	width="500px"	required="1" maxlength="255" />
+
+				<form_item type="popup_list"             id="spaceship_factory"         name="Spaceship factory"	width="500px"	required="1" maxlength="255" />
+				
+				<form_item type="auto_complete"          id="engine_type"               name="Engin type"           width="303px"  />
+			</group>
+		</form>
+
+       </forms>
+</interface>

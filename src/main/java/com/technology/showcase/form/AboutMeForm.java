@@ -1,8 +1,9 @@
 
 package com.technology.showcase.form;
 
-import static com.technology.scoring.jfrontoffice.server.field.PhoneFieldNames.*;
+import static com.technology.showcase.dao.AboutMeDao.*;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,64 +14,48 @@ import java.util.regex.Pattern;
 import com.technology.jef.server.exceptions.ServiceException;
 import com.technology.jef.server.dto.OptionDto;
 import com.technology.jef.server.dto.RecordDto;
-import com.technology.scoring.jfrontoffice.server.dao.AddressDao;
-import com.technology.scoring.jfrontoffice.server.dao.ApplicationSummaryDao;
-import com.technology.scoring.jfrontoffice.server.dao.ConsultantDao;
-import com.technology.scoring.jfrontoffice.server.dao.PhoneDao;
-import com.technology.scoring.jfrontoffice.server.field.AddressFieldNames;
-import com.technology.scoring.jfrontoffice.server.field.ApplicationSummaryFieldNames;
-import com.technology.scoring.jfrontoffice.server.field.PhoneFieldNames;
 import com.technology.jef.server.form.Form;
+import com.technology.showcase.dao.AboutMeDao;
+import com.technology.showcase.dao.GenderDao;
 
 /**
 * Interface "Phone" controller
 */
 
-public class PhoneForm extends Form {
+public class AboutMeForm extends Form {
 
 	@Override
 	public Map<String, String> getParametersMap() {
 
 		return new HashMap<String, String>(){{
-			put("calls_answer_person", CALLS_ANSWER_PERSON);
-			put("calls_employee", CALLS_EMPLOYEE);
-			put("phone_type_id", PHONE_TYPE_ID);
-			put("phone_number", PHONE_NUMBER);
-			put("calls_date", CALLS_DATE);
-			put("extension_phone_number", PHONE_EXTENSION_NUMBER);
-			put("is_customer_available", IS_CUSTOMER_AVAILABLE);
-			put("phone_comment", PHONE_COMMENT);
-			put("id", APPLICATION_ID);
-			put("calls_result_id", CALLS_RESULT_ID);
-
+			put("first_name", FIRST_NAME);
+			put("last_name", LAST_NAME);
+			put("gender", GENDER);
+			put("name_changed_upon_marriage", NAME_CHANGED_UPON_MARRIAGE);
+			put("birth_name", BIRTH_NAME);
+			put("social_status_id", SOCIAL_STATUS_ID);
 		}};
 	}
 
 	@Override
 	public void load(Integer applicationId, Integer operatorId, Integer cityId) throws ServiceException {
-		ApplicationSummaryDao applicationSummaryDao = new ApplicationSummaryDao();
+		AboutMeDao aboutMeDao = new AboutMeDao();
 
-		RecordDto applicationSummary = applicationSummaryDao.getApplication(applicationId);
-
-		PhoneDao phoneDao = new PhoneDao();
-		
-		setFormData(phoneDao.retrieve(operatorId, "formDebtorPhone", applicationId, (Integer) applicationSummary.get(ApplicationSummaryFieldNames.A_CLIENT_ID),1));
+		setFormData(aboutMeDao.load(applicationId).get(0));
 	}
 
 	@Override
 	public List<OptionDto> getList(Integer applicationId, Integer operatorId, Integer cityId, String parameterName)
 			throws ServiceException {
-		 List<OptionDto> list = new LinkedList<OptionDto>();
+		
+		List<OptionDto> list = new LinkedList<OptionDto>();
 
-		 if(parameterName.matches("^phone_type_id\\w*")) {
-			PhoneDao phoneDao = new PhoneDao();
-			list = phoneDao.getPhoneType();
-		} else if(parameterName.matches("^calls_result_id\\w*")) {
-			PhoneDao phoneDao = new PhoneDao();
-			list = phoneDao.getCallsResult();
+		if("gender".equals(parameterName)) {
+			GenderDao genderDao = new GenderDao();
+			list = genderDao.getOptions();
 		}
 
-		 return list;
+		return list;
 	}
 
 	@Override
