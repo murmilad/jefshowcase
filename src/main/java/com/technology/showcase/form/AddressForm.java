@@ -2,7 +2,12 @@
 package com.technology.showcase.form;
 
 import static com.technology.showcase.dao.AddressDao.*;
+import static com.technology.showcase.dao.PlanetDao.*;
+import static com.technology.showcase.dao.RegionDao.*;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,6 +19,13 @@ import com.technology.jef.server.exceptions.ServiceException;
 import com.technology.jef.server.dto.OptionDto;
 import com.technology.jef.server.dto.RecordDto;
 import com.technology.jef.server.form.Form;
+import com.technology.showcase.dao.AboutMeDao;
+import com.technology.showcase.dao.AddressDao;
+import com.technology.showcase.dao.GalaxyDao;
+import com.technology.showcase.dao.GenderDao;
+import com.technology.showcase.dao.PlanetDao;
+import com.technology.showcase.dao.RegionDao;
+import com.technology.showcase.dao.SocialStatusDao;
 
 /**
 * Interface "Phone" controller
@@ -34,13 +46,9 @@ public class AddressForm extends Form {
 
 	@Override
 	public void load(Integer applicationId, Integer operatorId, Integer cityId) throws ServiceException {
-		ApplicationSummaryDao applicationSummaryDao = new ApplicationSummaryDao();
+		AddressDao addressDao = new AddressDao();
 
-		RecordDto applicationSummary = applicationSummaryDao.getApplication(applicationId);
-
-		PhoneDao phoneDao = new PhoneDao();
-		
-		setFormData(phoneDao.retrieve(operatorId, "formDebtorPhone", applicationId, (Integer) applicationSummary.get(ApplicationSummaryFieldNames.A_CLIENT_ID),1));
+		setFormData(addressDao.load(applicationId));
 	}
 
 	@Override
@@ -48,12 +56,9 @@ public class AddressForm extends Form {
 			throws ServiceException {
 		 List<OptionDto> list = new LinkedList<OptionDto>();
 
-		 if(parameterName.matches("^phone_type_id\\w*")) {
-			PhoneDao phoneDao = new PhoneDao();
-			list = phoneDao.getPhoneType();
-		} else if(parameterName.matches("^calls_result_id\\w*")) {
-			PhoneDao phoneDao = new PhoneDao();
-			list = phoneDao.getCallsResult();
+		if("galaxy".equals(parameterName)) {
+			GalaxyDao galaxyDao = new GalaxyDao();
+			list = galaxyDao.getOptions();
 		}
 
 		 return list;
@@ -62,27 +67,52 @@ public class AddressForm extends Form {
 	@Override
 	public List<OptionDto> getList(Integer applicationId, Integer operatorId, Integer cityId, String parameterName,
 			Map<String, String> parameters) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		 
+		List<OptionDto> list = new LinkedList<OptionDto>();
+
+		if("planet".equals(parameterName)) {
+			PlanetDao planetDao = new PlanetDao();
+			list = planetDao.getOptions(new RecordDto() {{
+				put(GALAXY_ID, parameters.get("galaxy"));
+			}});
+		} else if ("region".equals(parameterName)) {
+			RegionDao regionDao = new RegionDao();
+			list = regionDao.getOptions(new RecordDto() {{
+				put(PLANET_ID, parameters.get("planet"));
+			}});
+		}
+
+		return list;
 	}
 
 	@Override
 	public String getValue(Integer applicationId, Integer operatorId, Integer cityId, String parameterName,
 			Map<String, String> parameters) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		String zip = "";
+		if ("zip".equals(parameterName)) {
+			RegionDao regionDao = new RegionDao();
+
+			try {
+				byte[] bytesOfMessage = parameters.get("galaxy").concat(parameters.get("planet")).concat(parameters.get("region")).getBytes("UTF-8");
+
+				MessageDigest md;
+				md = MessageDigest.getInstance("MD5");
+
+				zip =  md.digest(bytesOfMessage).toString();
+			} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+				throw new ServiceException(e.getMessage(), e.getCause());
+			}
+		}
+
+		return zip;
 	}
 
 	@Override
 	public Boolean isVisible(Integer applicationId, Integer operatorId, Integer cityId, String parameterName,
 			Map<String, String> parameters) throws ServiceException {
-		Boolean isVisible = false;
-
-		if(parameterName.matches("^extension_phone_number\\w*")) {
-			 isVisible = "2".equals(parameters.get("phone_type_id")); //рабочий
-		}
-
-		return isVisible;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -99,9 +129,9 @@ public class AddressForm extends Form {
 		List<String> errors = new LinkedList<String>();
 		isRequired = false;
 		
-		if ("phone_number".equals(parameterName) || "phone_type_id".equals(parameterName) ) {
-			isRequired = true;
-		} 
+		if ("zip".equals(parameterName) && !parameters.get(parameterName).matches("^[\\dA-F]+$")) {
+			errors.add("Incorrect Universe ZIP");
+		}
 		
 		errors.addAll(super.checkParameter(parameterName, isRequired, applicationId, groupPrefix, parameters));
 
@@ -112,21 +142,9 @@ public class AddressForm extends Form {
 	@Override
 	public void saveForm(Integer applicationId, Integer operatorId, String iPAddress, String groupPrefix, Map<String, String> parameters)
 			throws ServiceException {
-		ApplicationSummaryDao applicationSummaryDao = new ApplicationSummaryDao();
+		AddressDao addressDao = new AddressDao();
 
-		RecordDto applicationSummary = applicationSummaryDao.getApplication(applicationId);
-		
-
-		PhoneDao phoneDao = new PhoneDao();
-		
-		Map<String, String> daoParameters = mapDaoParameters(parameters);
-
-		daoParameters.put(PhoneFieldNames.IP_ADDRESS, iPAddress);
-		daoParameters.put(PhoneFieldNames.OPERATOR_ID, operatorId.toString());
-		daoParameters.put(PhoneFieldNames.APPLICATION_ID, applicationId.toString());
-		daoParameters.put(PhoneFieldNames.CUSTOMER_ID, applicationSummary.get(ApplicationSummaryFieldNames.A_CLIENT_ID));
-
-		phoneDao.createOrUpdate(daoParameters);
+		addressDao.update(mapDaoParameters(parameters));
 	}	
 
 }

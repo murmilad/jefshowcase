@@ -18,7 +18,7 @@ public class AddressDao extends H2Dao {
 	
 	@Override
 	public String getTable() {
-		return "about_me";
+		return "address";
 	}
 
 	@Override

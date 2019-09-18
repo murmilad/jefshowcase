@@ -16,7 +16,7 @@ public class MultiPassDao extends H2Dao {
 	
 	@Override
 	public String getTable() {
-		return "about_me";
+		return "multipass";
 	}
 
 	@Override

@@ -14,6 +14,8 @@ import com.technology.jef.server.exceptions.ServiceException;
 import com.technology.jef.server.dto.OptionDto;
 import com.technology.jef.server.dto.RecordDto;
 import com.technology.jef.server.form.Form;
+import com.technology.showcase.dao.AboutMeDao;
+import com.technology.showcase.dao.MultiPassDao;
 
 /**
 * Interface "Phone" controller
@@ -33,29 +35,16 @@ public class MultiPassForm extends Form {
 
 	@Override
 	public void load(Integer applicationId, Integer operatorId, Integer cityId) throws ServiceException {
-		ApplicationSummaryDao applicationSummaryDao = new ApplicationSummaryDao();
+		MultiPassDao multiPassDao = new MultiPassDao();
 
-		RecordDto applicationSummary = applicationSummaryDao.getApplication(applicationId);
-
-		PhoneDao phoneDao = new PhoneDao();
-		
-		setFormData(phoneDao.retrieve(operatorId, "formDebtorPhone", applicationId, (Integer) applicationSummary.get(ApplicationSummaryFieldNames.A_CLIENT_ID),1));
+		setFormData(multiPassDao.load(applicationId));
 	}
 
 	@Override
 	public List<OptionDto> getList(Integer applicationId, Integer operatorId, Integer cityId, String parameterName)
 			throws ServiceException {
-		 List<OptionDto> list = new LinkedList<OptionDto>();
-
-		 if(parameterName.matches("^phone_type_id\\w*")) {
-			PhoneDao phoneDao = new PhoneDao();
-			list = phoneDao.getPhoneType();
-		} else if(parameterName.matches("^calls_result_id\\w*")) {
-			PhoneDao phoneDao = new PhoneDao();
-			list = phoneDao.getCallsResult();
-		}
-
-		 return list;
+		// TODO Auto-generated method stub
+		 return null;
 	}
 
 	@Override
@@ -75,13 +64,7 @@ public class MultiPassForm extends Form {
 	@Override
 	public Boolean isVisible(Integer applicationId, Integer operatorId, Integer cityId, String parameterName,
 			Map<String, String> parameters) throws ServiceException {
-		Boolean isVisible = false;
-
-		if(parameterName.matches("^extension_phone_number\\w*")) {
-			 isVisible = "2".equals(parameters.get("phone_type_id")); //рабочий
-		}
-
-		return isVisible;
+		return null;
 	}
 
 	@Override
@@ -98,8 +81,8 @@ public class MultiPassForm extends Form {
 		List<String> errors = new LinkedList<String>();
 		isRequired = false;
 		
-		if ("phone_number".equals(parameterName) || "phone_type_id".equals(parameterName) ) {
-			isRequired = true;
+		if ("multipass_id".equals(parameterName) && !parameters.get(parameterName).matches("^\\w{2}\\d{7}$")) {
+			errors.add("Incorrect Universe Pass");
 		} 
 		
 		errors.addAll(super.checkParameter(parameterName, isRequired, applicationId, groupPrefix, parameters));
@@ -111,21 +94,9 @@ public class MultiPassForm extends Form {
 	@Override
 	public void saveForm(Integer applicationId, Integer operatorId, String iPAddress, String groupPrefix, Map<String, String> parameters)
 			throws ServiceException {
-		ApplicationSummaryDao applicationSummaryDao = new ApplicationSummaryDao();
+		MultiPassDao multiPassDao = new MultiPassDao();
 
-		RecordDto applicationSummary = applicationSummaryDao.getApplication(applicationId);
-		
-
-		PhoneDao phoneDao = new PhoneDao();
-		
-		Map<String, String> daoParameters = mapDaoParameters(parameters);
-
-		daoParameters.put(PhoneFieldNames.IP_ADDRESS, iPAddress);
-		daoParameters.put(PhoneFieldNames.OPERATOR_ID, operatorId.toString());
-		daoParameters.put(PhoneFieldNames.APPLICATION_ID, applicationId.toString());
-		daoParameters.put(PhoneFieldNames.CUSTOMER_ID, applicationSummary.get(ApplicationSummaryFieldNames.A_CLIENT_ID));
-
-		phoneDao.createOrUpdate(daoParameters);
+		multiPassDao.update(mapDaoParameters(parameters));
 	}	
 
 }

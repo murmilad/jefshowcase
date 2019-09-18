@@ -145,7 +145,38 @@ public abstract class H2Dao {
 	                db.prepareStatement("SELECT * from " + getTable() + ";")) {
 	           ResultSet rs = query.executeQuery();
 	           while (rs.next()) {
-	        	   result.add(new OptionDto(rs.getString("name"), rs.getString(getKey())));
+	        	   OptionDto option = new OptionDto(rs.getString(getFields().get(1)), rs.getString(getKey()));
+	        	   for (String key: getFields()) {
+	        		   option.put(key, rs.getString(key));
+	        	   }
+	           }
+	           rs.close();
+	        }            
+		} catch (SQLException e) {
+			throw new ServiceException(e.getMessage(), e.getCause());
+		}
+		
+		return result;
+	}
+
+	public List<OptionDto> getOptions(RecordDto request) throws ServiceException {
+		List<OptionDto> result = new LinkedList<OptionDto>();
+
+		try {
+			String querySQL = "SELECT * from " + getTable() + (request.keySet().size() > 0 ? " WHERE " : "");
+    		for (String key: request.keySet()) {
+    			querySQL += " " + key + " = '" + request.get(key) + "' "; 
+    		}
+    		querySQL += ";";
+
+			try (PreparedStatement query =
+	                db.prepareStatement(querySQL)) {
+	           ResultSet rs = query.executeQuery();
+	           while (rs.next()) {
+	        	   OptionDto option = new OptionDto(rs.getString(getFields().get(1)), rs.getString(getKey()));
+	        	   for (String key: getFields()) {
+	        		   option.put(key, rs.getString(key));
+	        	   }
 	           }
 	           rs.close();
 	        }            

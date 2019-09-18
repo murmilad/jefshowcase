@@ -17,6 +17,7 @@ import com.technology.jef.server.dto.RecordDto;
 import com.technology.jef.server.form.Form;
 import com.technology.showcase.dao.AboutMeDao;
 import com.technology.showcase.dao.GenderDao;
+import com.technology.showcase.dao.SocialStatusDao;
 
 /**
 * Interface "Phone" controller
@@ -41,7 +42,7 @@ public class AboutMeForm extends Form {
 	public void load(Integer applicationId, Integer operatorId, Integer cityId) throws ServiceException {
 		AboutMeDao aboutMeDao = new AboutMeDao();
 
-		setFormData(aboutMeDao.load(applicationId).get(0));
+		setFormData(aboutMeDao.load(applicationId));
 	}
 
 	@Override
@@ -53,6 +54,9 @@ public class AboutMeForm extends Form {
 		if("gender".equals(parameterName)) {
 			GenderDao genderDao = new GenderDao();
 			list = genderDao.getOptions();
+		} else if("gender".equals(parameterName)) {
+			SocialStatusDao socialStatusDao = new SocialStatusDao();
+			list = socialStatusDao.getOptions();
 		}
 
 		return list;
@@ -77,8 +81,8 @@ public class AboutMeForm extends Form {
 			Map<String, String> parameters) throws ServiceException {
 		Boolean isVisible = false;
 
-		if(parameterName.matches("^extension_phone_number\\w*")) {
-			 isVisible = "2".equals(parameters.get("phone_type_id")); //рабочий
+		if("birth_name".equals(parameterName)) {
+			 isVisible = "1".equals(parameters.get("name_changed_upon_marriage"));
 		}
 
 		return isVisible;
@@ -91,41 +95,14 @@ public class AboutMeForm extends Form {
 		return null;
 	}
 
-	@Override
-	public List<String> checkParameter(String parameterName, Boolean isRequired, Integer applicationId, String groupPrefix,
-			Map<String, String> parameters) throws ServiceException {
-
-		List<String> errors = new LinkedList<String>();
-		isRequired = false;
-		
-		if ("phone_number".equals(parameterName) || "phone_type_id".equals(parameterName) ) {
-			isRequired = true;
-		} 
-		
-		errors.addAll(super.checkParameter(parameterName, isRequired, applicationId, groupPrefix, parameters));
-
-		return errors;
-	}
-
+	
 	
 	@Override
 	public void saveForm(Integer applicationId, Integer operatorId, String iPAddress, String groupPrefix, Map<String, String> parameters)
 			throws ServiceException {
-		ApplicationSummaryDao applicationSummaryDao = new ApplicationSummaryDao();
+		AboutMeDao aboutMeDao = new AboutMeDao();
 
-		RecordDto applicationSummary = applicationSummaryDao.getApplication(applicationId);
-		
-
-		PhoneDao phoneDao = new PhoneDao();
-		
-		Map<String, String> daoParameters = mapDaoParameters(parameters);
-
-		daoParameters.put(PhoneFieldNames.IP_ADDRESS, iPAddress);
-		daoParameters.put(PhoneFieldNames.OPERATOR_ID, operatorId.toString());
-		daoParameters.put(PhoneFieldNames.APPLICATION_ID, applicationId.toString());
-		daoParameters.put(PhoneFieldNames.CUSTOMER_ID, applicationSummary.get(ApplicationSummaryFieldNames.A_CLIENT_ID));
-
-		phoneDao.createOrUpdate(daoParameters);
+		aboutMeDao.update(mapDaoParameters(parameters));
 	}	
 
 }
