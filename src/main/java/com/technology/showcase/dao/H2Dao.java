@@ -12,6 +12,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import com.technology.jef.server.dto.OptionDto;
 import com.technology.jef.server.dto.RecordDto;
 import com.technology.jef.server.exceptions.ServiceException;
@@ -28,8 +33,11 @@ public abstract class H2Dao {
 		super();
 
 		try {
-			setDb(DriverManager.getConnection("jdbc:h2:mem:"));
-		} catch (SQLException e) {
+			Context ctx = new InitialContext();
+			DataSource ds = (DataSource) ctx.lookup("java:/comp/env/jdbc/empDS");
+
+			setDb(ds.getConnection());
+		} catch (SQLException | NamingException e) {
 			throw new ServiceException(e.getMessage(), e.getCause());
 		}
 	}
