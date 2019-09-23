@@ -2,6 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.technology.showcase</groupId>
   <artifactId>JefShowcase</artifactId>
+  <packaging>war</packaging>
   <version>1.0.0</version>
   <name>JefShowcase</name>
   <build>
@@ -21,7 +22,7 @@
             <version>2.2</version>
             <configuration>
                 <server>Tomcat8</server>
-                <url>http://127.0.0.1:8083/manager/text</url>
+                <url>http://127.0.0.1:8080/manager/text</url>
 		      	<username>admin</username>
        			<password>password</password>
             </configuration>
@@ -40,7 +41,7 @@
 	    </dependency>
     	<dependency>
     		<groupId>com.technology.jef</groupId>
-    		<artifactId>jef</artifactId>
+    		<artifactId>JEF</artifactId>
     		<version>1.1.1</version>
     	</dependency>
 		<dependency>
@@ -64,6 +65,16 @@
             <artifactId>h2</artifactId>
             <version>1.4.199</version>
         </dependency>
+		<dependency>
+		    <groupId>org.apache.maven.plugins</groupId>
+		    <artifactId>maven-war-plugin</artifactId>
+		    <version>3.2.3</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.github.kongchen</groupId>
+		    <artifactId>swagger-maven-plugin</artifactId>
+		    <version>3.1.8</version>
+		</dependency>
 	</dependencies>
 	<repositories>
 	    <repository>
