@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import io.swagger.annotations.Api;
 
 import com.technology.jef.server.exceptions.ServiceException;
 import com.technology.jef.server.form.Service;
@@ -36,7 +35,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-@Api
 @Path("/form")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class FormWebService{
