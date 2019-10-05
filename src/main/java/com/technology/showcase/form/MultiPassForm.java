@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import com.technology.jef.server.exceptions.ServiceException;
 import com.technology.jef.server.dto.OptionDto;
 import com.technology.jef.server.dto.RecordDto;
+import com.technology.jef.server.form.Field;
 import com.technology.jef.server.form.Form;
 import com.technology.showcase.dao.AboutMeDao;
 import com.technology.showcase.dao.MultiPassDao;
@@ -24,11 +25,32 @@ import com.technology.showcase.dao.MultiPassDao;
 public class MultiPassForm extends Form {
 
 	@Override
-	public Map<String, String> getParametersMap() {
+	public Map<String, Field> getFieldsMap() {
 
-		return new HashMap<String, String>(){{
-			put("has_multipass", HAS_MULTIPASS);
-			put("multipass_id", MULTIPASS_ID);
+		return new HashMap<String, Field>(){{
+			put("has_multipass", new Field(HAS_MULTIPASS) {
+				public java.util.List<OptionDto> getListHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+					return new LinkedList<OptionDto> () {{
+						add(new OptionDto("Yes", 1));
+						add(new OptionDto("No", 0));
+					}}; 
+					
+				};
+			});
+			put("multipass_id", new Field(MULTIPASS_ID) {
+				public java.util.List<String> checkHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+					List<String> errors = new LinkedList<String>();
+					
+					if ("multipass_id".equals(parameterName) && !parameters.get(parameterName).matches("^\\w{2}\\d{7}$")) {
+						errors.add("Incorrect Universe Pass");
+					} 
+					
+					return errors;
+				};
+				public Boolean isVisibleHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+					return "1".equals(parameters.get("has_multipass"));
+				};
+			});
 
 		}};
 	}
@@ -40,63 +62,13 @@ public class MultiPassForm extends Form {
 		setFormData(multiPassDao.load(applicationId));
 	}
 
-	@Override
-	public List<OptionDto> getList(Integer applicationId, Integer operatorId, Integer cityId, String parameterName)
-			throws ServiceException {
-		// TODO Auto-generated method stub
-		 return null;
-	}
 
-	@Override
-	public List<OptionDto> getList(Integer applicationId, Integer operatorId, Integer cityId, String parameterName,
-			Map<String, String> parameters) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getValue(Integer applicationId, Integer operatorId, Integer cityId, String parameterName,
-			Map<String, String> parameters) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Boolean isVisible(Integer applicationId, Integer operatorId, Integer cityId, String parameterName,
-			Map<String, String> parameters) throws ServiceException {
-		return null;
-	}
-
-	@Override
-	public Boolean isActive(Integer applicationId, Integer operatorId, Integer cityId, String parameterName,
-			Map<String, String> parameters) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<String> checkParameter(String parameterName, Boolean isRequired, Integer applicationId, String groupPrefix,
-			Map<String, String> parameters) throws ServiceException {
-
-		List<String> errors = new LinkedList<String>();
-		isRequired = false;
-		
-		if ("multipass_id".equals(parameterName) && !parameters.get(parameterName).matches("^\\w{2}\\d{7}$")) {
-			errors.add("Incorrect Universe Pass");
-		} 
-		
-		errors.addAll(super.checkParameter(parameterName, isRequired, applicationId, groupPrefix, parameters));
-
-		return errors;
-	}
-
-	
 	@Override
 	public void saveForm(Integer applicationId, Integer operatorId, String iPAddress, String groupPrefix, Map<String, String> parameters)
 			throws ServiceException {
 		MultiPassDao multiPassDao = new MultiPassDao();
 
-		multiPassDao.update(mapDaoParameters(parameters));
+		multiPassDao.update(mapDaoParameters(parameters), applicationId);
 	}	
 
 }

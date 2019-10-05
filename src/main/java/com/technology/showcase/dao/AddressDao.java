@@ -27,13 +27,13 @@ public class AddressDao extends H2Dao {
 	}
 
 	@Override
-	public LinkedList<String> getFields() {
+	public LinkedList<DataField> getFields()  throws ServiceException {
 
-		return new LinkedList<String>(){{
-			add(GALAXY);
-			add(PLANET);
-			add(REGION);
-			add(REG_POST_INDEX);
+		return new LinkedList<DataField>(){{
+			add(new DataField(GALAXY));
+			add(new DataField(PLANET));
+			add(new DataField(REGION));
+			add(new DataField(REG_POST_INDEX));
 		}};
 	}
 

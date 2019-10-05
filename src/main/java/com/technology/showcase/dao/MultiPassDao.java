@@ -25,11 +25,11 @@ public class MultiPassDao extends H2Dao {
 	}
 
 	@Override
-	public LinkedList<String> getFields() {
+	public LinkedList<DataField> getFields() throws ServiceException  {
 
-		return new LinkedList<String>(){{
-			add(HAS_MULTIPASS);
-			add(MULTIPASS_ID);
+		return new LinkedList<DataField>(){{
+			add(new DataField(HAS_MULTIPASS));
+			add(new DataField(MULTIPASS_ID));
 		}};
 	}
 

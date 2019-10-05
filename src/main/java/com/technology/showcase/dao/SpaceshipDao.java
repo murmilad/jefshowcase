@@ -26,13 +26,13 @@ public class SpaceshipDao extends H2Dao {
 	}
 
 	@Override
-	public LinkedList<String> getFields() {
+	public LinkedList<DataField> getFields() throws ServiceException  {
 
-		return new LinkedList<String>(){{
-			add(SPACESHIP_GALAXY);
-			add(SPACESHIP_PLANET);
-			add(SPACESHIP_FACTORY);
-			add(ENGINE_TYPE);
+		return new LinkedList<DataField>(){{
+			add(new DataField(SPACESHIP_GALAXY));
+			add(new DataField(SPACESHIP_PLANET));
+			add(new DataField(SPACESHIP_FACTORY));
+			add(new DataField(ENGINE_TYPE));
 		}};
 	}
 

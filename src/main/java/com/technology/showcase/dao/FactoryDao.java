@@ -47,11 +47,11 @@ public class FactoryDao extends H2Dao {
 	}
 
 	@Override
-	public LinkedList<String> getFields() {
+	public LinkedList<DataField> getFields() throws ServiceException  {
 
-		return new LinkedList<String>(){{
-			add(NAME);
-			add(PLANET_ID);
+		return new LinkedList<DataField>(){{
+			add(new DataField(NAME));
+			add(new DataField(PLANET_ID));
 		}};
 	}
 

@@ -10,7 +10,7 @@ public class PlanetDao extends H2Dao {
 	public static final String NAME = "name";
 	public static final String GALAXY_ID = "galaxy_id";
 
-	private static final String[] PLANETS = new String[] {"Eufornis Major", "Ganthel", "Hosnian", "Hosnian Prime", "Kuat", "Lanz Carpo", "Metellos", "Neral", 	"N'Zoth", "Plexis", "Protobranch", "Ralltiir", "Raysho", "Skako Minor", "Tangenine", "Tinnel IV", "Cosia", "Cos Secundu", "Ojom", "Sha Qarot", "Tython", "Vulpter", "Aquaris", "Cartao", "Dorin"};
+	private static final String[] PLANETS = new String[] {"Eufornis Major", "Ganthel", "Hosnian", "Hosnian Prime", "Kuat", "Lanz Carpo", "Metellos", "Neral", 	"N'Zoth", "Plexis", "Protobranch", "Ralltiir", "Raysho", "Skako Minor", "Tangenine", "Tinnel IV", "Cosia", "Cos Secundu", "Ojom", "Sha Qarot", "Tython", "Vulpter", "Aquaris", "Cartao", "Dorin", "Dorin II"};
 
 	public PlanetDao() throws ServiceException {
 		super();
@@ -22,16 +22,11 @@ public class PlanetDao extends H2Dao {
 		for (int i = 1; i<=5; i++) {
 			for (int j = 1; j<=5; j++) {
 				RecordDto record = new RecordDto();
-				record.put(NAME, PLANETS[j]);
+				record.put(NAME, PLANETS[(i-1)*5 + j]);
 				record.put(GALAXY_ID, String.valueOf(i));
 				super.create(record);
 			}
 		}
-
-		super.create(new RecordDto() {{
-			put(NAME, "Skirnir");
-			put(GALAXY_ID, "5");
-		}});
 	}
 	
 
@@ -47,11 +42,11 @@ public class PlanetDao extends H2Dao {
 	}
 
 	@Override
-	public LinkedList<String> getFields() {
+	public LinkedList<DataField> getFields() throws ServiceException  {
 
-		return new LinkedList<String>(){{
-			add(NAME);
-			add(GALAXY_ID);
+		return new LinkedList<DataField>(){{
+			add(new DataField(NAME));
+			add(new DataField(GALAXY_ID));
 		}};
 	}
 

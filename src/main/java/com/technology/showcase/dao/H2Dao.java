@@ -6,16 +6,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.security.auth.Destroyable;
 import javax.sql.DataSource;
+
+import org.apache.maven.shared.utils.StringUtils;
 
 import com.technology.jef.server.dto.OptionDto;
 import com.technology.jef.server.dto.RecordDto;
@@ -23,25 +28,36 @@ import com.technology.jef.server.exceptions.ServiceException;
 
 public abstract class H2Dao {
 
-	Connection db;
+	static Connection db = null;
 
 	public abstract String getTable();
 	public abstract String getKey();
-	public abstract List<String> getFields();
+	public abstract List<DataField> getFields() throws ServiceException;
 	
 	public H2Dao() throws ServiceException {
 		super();
-
 		try {
-			Context ctx = new InitialContext();
-			DataSource ds = (DataSource) ctx.lookup("java:/comp/env/jdbc/empDS");
-
-			setDb(ds.getConnection());
+			if (db == null || db.isClosed()) {
+					Context ctx = new InitialContext();
+					DataSource ds = (DataSource) ctx.lookup("java:/comp/env/jdbc/showcaseDS");
+		
+					setDb(ds.getConnection());
+			}
 		} catch (SQLException | NamingException e) {
 			throw new ServiceException(e.getMessage(), e.getCause());
 		}
 	}
 
+	public static void close()  throws ServiceException {
+		try {
+			if (db != null && !db.isClosed()) {
+				db.close();
+			}
+		} catch (SQLException e) {
+			throw new ServiceException(e.getMessage(), e.getCause());
+		}
+	}
+	
 	public Connection getDb() {
 		return db;
 	}
@@ -51,33 +67,54 @@ public abstract class H2Dao {
 	}
 
 
-	public Integer update(RecordDto values) throws ServiceException {
+	public Integer update(RecordDto fields, Integer applicationId) throws ServiceException {
 
 		Integer recordId = null;
-		for (String key : values.keySet()) {
-			if(!getFields().contains(key)) {
+		for (String key : fields.keySet()) {
+			if(!getFields().stream().map(field  -> field.getName()).collect(Collectors.toList()).contains(key)) {
 				throw new ServiceException("Unknown field " + key);
 			}
 		}
+		String sql = "";
 		
 		try {
-			try (Statement dataQuery = db.createStatement()) {
-	            dataQuery.execute(
-	            		"MERGE INTO " + getTable() + " (" +  String.join(",", values.keySet()) + ")" +
-	            		" KEY (" + getKey() + ")" + 
-	            		" VALUES (" + join(",", values.values()) + ");"
-	            );
+
+			ArrayList<Object> values = new ArrayList<Object>(fields.values());
+
+			if (applicationId != null) {
+				sql =
+	            		"MERGE INTO " + getTable() + " (" +  getKey() + ", " + String.join(",", fields.keySet()) + ")" +
+	            		" KEY (" + getKey() + ")"; 
+
+				values.add(0, String.valueOf(applicationId));
+			} else {
+				sql =
+	            		"INSERT INTO " + getTable() + " (" +  String.join(",", fields.keySet()) + ")";
 			}
-	        try (PreparedStatement query =
-	                    db.prepareStatement("SELECT @@IDENTITY AS " + getKey() + ";")) {
-	           ResultSet rs = query.executeQuery();
-	           while (rs.next()) {
-	        	   recordId = rs.getInt(getKey());
-	           }
-	           rs.close();
-	        }            
+
+			sql = sql + " VALUES (? " + StringUtils.repeat(",?", values.size()-1)  + ");";
+
+			PreparedStatement preparedStatement = db.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			for (int i = 1; i<= values.size(); i++ ) {
+				preparedStatement.setString(i, (String) values.get(i-1));
+			}
+
+			preparedStatement.executeUpdate();
+
+			if (applicationId == null) {
+				ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+	            if (generatedKeys.next()) {
+	            	recordId = generatedKeys.getInt(1);
+	            } else {
+	                preparedStatement.close();
+	            	throw new ServiceException("Can't get indentifier for merged of " +  getTable());
+	            }
+			} else {
+				recordId = applicationId;
+			}
+            preparedStatement.close();
 		} catch (SQLException e) {
-			throw new ServiceException(e.getMessage(), e.getCause());
+			throw new ServiceException(e.getMessage() + " for SQL: " + sql, e.getCause());
 		}
 
 		return recordId;
@@ -87,26 +124,27 @@ public abstract class H2Dao {
 
 		Integer recordId = null;
 		for (String key : recordDto.keySet()) {
-			if(!getFields().contains(key)) {
+			if(!getFields().stream().map(field  -> field.getName()).collect(Collectors.toList()).contains(key)) {
 				throw new ServiceException("Unknown field " + key);
 			}
 		}
 
 		try {
-			try (Statement dataQuery = db.createStatement()) {
-	            dataQuery.execute(
-	            		"INSERT INTO " + getTable() + " (" +  String.join(",", recordDto.keySet()) + ")" +
-	            		" VALUES (" + join(",",  recordDto.values()) + ");"
-	            );
+			String sql = "INSERT INTO " + getTable() + " (" +  String.join(",", recordDto.keySet()) + ")" +
+            		" VALUES (?" + StringUtils.repeat(",?", recordDto.values().size()-1) + ");";
+			PreparedStatement preparedStatement = db.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			for (int i = 1; i<= recordDto.values().size(); i++ ) {
+				preparedStatement.setString(i, (String) recordDto.values().toArray()[i-1]);
 			}
-	        try (PreparedStatement query =
-	                    db.prepareStatement("SELECT @@IDENTITY AS " + getKey() + ";")) {
-	           ResultSet rs = query.executeQuery();
-	           while (rs.next()) {
-	        	   recordId = rs.getInt(getKey());
-	           }
-	           rs.close();
-	        }            
+			preparedStatement.executeUpdate();
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+            	recordId = generatedKeys.getInt(1);
+            } else {
+                preparedStatement.close();
+            	throw new ServiceException("Can't get indentifier for new element of " +  getTable());
+            }
+            preparedStatement.close();
 		} catch (SQLException e) {
 			throw new ServiceException(e.getMessage(), e.getCause());
 		}
@@ -127,19 +165,25 @@ public abstract class H2Dao {
 
 		RecordDto result = new RecordDto();
 
-		try {
-	        try (PreparedStatement query =
-	                db.prepareStatement("SELECT * from " + getTable() +  " WHERE " + getKey() + " = " + id + ";")) {
-	           ResultSet rs = query.executeQuery();
-	           while (rs.next()) {
-	        	   for (String key: getFields()) {
-	        		   result.put(key, rs.getString(key));
-	        	   }
-	           }
-	           rs.close();
-	        }            
-		} catch (SQLException e) {
-			throw new ServiceException(e.getMessage(), e.getCause());
+		if (id != null) {
+			try {
+		        try (PreparedStatement query =
+		                db.prepareStatement("SELECT * from " + getTable() +  " WHERE " + getKey() + " = " + id + ";")) {
+		           ResultSet rs = query.executeQuery();
+		           while (rs.next()) {
+		        	   for (DataField key: getFields()) {
+		        		   result.put(key.getName(), rs.getString(key.getName()));
+		        	   }
+		           }
+		           rs.close();
+		        }
+		        if (result.size() == 0) {
+//TODO when groups will created
+//		        	throw new ServiceException("Record not found for id: " + String.valueOf(id) + " table: " + getTable());
+		        }
+			} catch (SQLException e) {
+				throw new ServiceException(e.getMessage(), e.getCause());
+			}
 		}
 		
 		return result;
@@ -153,10 +197,11 @@ public abstract class H2Dao {
 	                db.prepareStatement("SELECT * from " + getTable() + ";")) {
 	           ResultSet rs = query.executeQuery();
 	           while (rs.next()) {
-	        	   OptionDto option = new OptionDto(rs.getString(getFields().get(1)), rs.getString(getKey()));
-	        	   for (String key: getFields()) {
-	        		   option.put(key, rs.getString(key));
+	        	   OptionDto option = new OptionDto(rs.getString(getFields().get(0).getName()), rs.getString(getKey()));
+	        	   for (DataField key: getFields()) {
+	        		   option.put(key.getName(), rs.getString(key.getName()));
 	        	   }
+		           result.add(option);
 	           }
 	           rs.close();
 	        }            
@@ -181,10 +226,11 @@ public abstract class H2Dao {
 	                db.prepareStatement(querySQL)) {
 	           ResultSet rs = query.executeQuery();
 	           while (rs.next()) {
-	        	   OptionDto option = new OptionDto(rs.getString(getFields().get(1)), rs.getString(getKey()));
-	        	   for (String key: getFields()) {
-	        		   option.put(key, rs.getString(key));
+	        	   OptionDto option = new OptionDto(rs.getString(getFields().get(0).getName()), rs.getString(getKey()));
+	        	   for (DataField key: getFields()) {
+	        		   option.put(key.getName(), rs.getString(key.getName()));
 	        	   }
+		           result.add(option);
 	           }
 	           rs.close();
 	        }            
@@ -198,11 +244,12 @@ public abstract class H2Dao {
 	public void init() throws ServiceException {
 		try {
 			try (Statement dataQuery = db.createStatement()) {
-	            dataQuery.execute(
-	            	"CREATE TABLE " + getTable() + 
-	            	" (" + getKey() + " int NOT NULL AUTO_INCREMENT," +
-	            	String.join(" varchar(50),", getFields()) + ", PRIMARY KEY (" + getKey() + "))"
+				dataQuery.execute(
+	            	"DROP TABLE IF EXISTS " + getTable() + "; CREATE TABLE " + getTable() + 
+	            	" (" + getKey() + " int AUTO_INCREMENT primary key, " +
+	            	String.join(" varchar(250),", getFields().stream().map(field  -> field.getName()).collect(Collectors.toList())) + " varchar(50));"
 	            );
+				dataQuery.close();
 			}
 		} catch (SQLException e) {
 			throw new ServiceException(e.getMessage(), e.getCause());

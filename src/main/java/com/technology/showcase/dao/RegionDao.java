@@ -20,10 +20,10 @@ public class RegionDao extends H2Dao {
 	public void init() throws ServiceException {
 		super.init();
 		
-		for (int i = 1; i<=5; i++) {
+		for (int i = 1; i<=25; i++) {
 			for (int j = 1; j<=2; j++) {
 				RecordDto record = new RecordDto();
-				record.put(NAME, REGIONS[j]);
+				record.put(NAME, REGIONS[(i-1)*2 + j]);
 				record.put(PLANET_ID, String.valueOf(i));
 				super.create(record);
 			}
@@ -43,11 +43,11 @@ public class RegionDao extends H2Dao {
 	}
 
 	@Override
-	public LinkedList<String> getFields() {
+	public LinkedList<DataField> getFields() throws ServiceException  {
 
-		return new LinkedList<String>(){{
-			add(NAME);
-			add(PLANET_ID);
+		return new LinkedList<DataField>(){{
+			add(new DataField(NAME));
+			add(new DataField(PLANET_ID));
 		}};
 	}
 

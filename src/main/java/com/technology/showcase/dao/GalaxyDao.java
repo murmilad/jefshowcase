@@ -46,10 +46,10 @@ public class GalaxyDao extends H2Dao {
 	}
 
 	@Override
-	public LinkedList<String> getFields() {
+	public LinkedList<DataField> getFields() throws ServiceException  {
 
-		return new LinkedList<String>(){{
-			add(NAME);
+		return new LinkedList<DataField>(){{
+			add(new DataField(NAME));
 		}};
 	}
 

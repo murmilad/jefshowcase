@@ -22,6 +22,7 @@ import static java.util.Calendar.*;
 import com.technology.jef.server.exceptions.ServiceException;
 import com.technology.jef.server.dto.OptionDto;
 import com.technology.jef.server.dto.RecordDto;
+import com.technology.jef.server.form.Field;
 import com.technology.jef.server.form.Form;
 import com.technology.jef.server.form.FormData.Attribute;
 import com.technology.showcase.dao.AboutMeDao;
@@ -39,13 +40,39 @@ import com.technology.showcase.dao.SpaceshipDao;
 public class SpaceshipForm extends Form {
 
 	@Override
-	public Map<String, String> getParametersMap() {
+	public Map<String, Field> getFieldsMap() {
 
-		return new HashMap<String, String>(){{
-			put("spaceship_galaxy", SPACESHIP_GALAXY);
-			put("spaceship_planet", SPACESHIP_PLANET);
-			put("spaceship_factory", SPACESHIP_FACTORY);
-			put("engine_type", ENGINE_TYPE);
+		return new HashMap<String, Field>(){{
+			put("spaceship_galaxy", new Field(SPACESHIP_GALAXY) {
+				public java.util.List<OptionDto> getListHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+					GalaxyDao galaxyDao = new GalaxyDao();
+					return  galaxyDao.getOptions();
+				};
+			});
+			put("spaceship_planet", new Field(SPACESHIP_PLANET) {
+				public java.util.List<OptionDto> getListInteractiveHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+					PlanetDao planetDao = new PlanetDao();
+					return  planetDao.getOptions(new RecordDto() {{
+						put(GALAXY_ID, parameters.get("spaceship_galaxy"));
+					}});
+				};
+			});
+			put("spaceship_factory", new Field(SPACESHIP_FACTORY) {
+				public java.util.List<OptionDto> getListInteractiveHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+					FactoryDao factoryDao = new FactoryDao();
+					return  factoryDao.getOptions(new RecordDto() {{
+						put(PLANET_ID, parameters.get("spaceship_planet"));
+					}});
+				};
+			});
+			put("engine_type", new Field(ENGINE_TYPE) {
+				public java.util.List<OptionDto> getListInteractiveHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+					EngineTypeFactoryDao engineTypeFactoryDao = new EngineTypeFactoryDao();
+					return  engineTypeFactoryDao.getEngineTypes(new RecordDto() {{
+						put(FACTORY_ID, parameters.get("factory"));
+					}});
+				};
+			});
 
 		}};
 	}
@@ -59,74 +86,6 @@ public class SpaceshipForm extends Form {
 		setFormData(spaceshipDao.load(applicationId));
 	}
 
-	@Override
-	public List<OptionDto> getList(Integer applicationId, Integer operatorId, Integer cityId, String parameterName)
-			throws ServiceException {
-		List<OptionDto> list = new LinkedList<OptionDto>();
-
-		if("spaceship_galaxy".equals(parameterName)) {
-			GalaxyDao galaxyDao = new GalaxyDao();
-			list = galaxyDao.getOptions();
-		}
-		
-		return list;
-	}
-
-	@Override
-	public List<OptionDto> getList(Integer applicationId, Integer operatorId, Integer cityId, 
-			String parameterName, Map<String, String> parameters) throws ServiceException {
-		List<OptionDto> list = new LinkedList<OptionDto>();
-
-		if("spaceship_planet".equals(parameterName)) {
-			PlanetDao planetDao = new PlanetDao();
-			list = planetDao.getOptions(new RecordDto() {{
-				put(GALAXY_ID, parameters.get("spaceship_galaxy"));
-			}});
-		} else if ("spaceship_factory".equals(parameterName)) {
-			FactoryDao factoryDao = new FactoryDao();
-			list = factoryDao.getOptions(new RecordDto() {{
-				put(PLANET_ID, parameters.get("spaceship_planet"));
-			}});
-		} else if ("engine_type".equals(parameterName)) {
-			EngineTypeFactoryDao engineTypeFactoryDao = new EngineTypeFactoryDao();
-			list = engineTypeFactoryDao.getEngineTypes(new RecordDto() {{
-				put(FACTORY_ID, parameters.get("factory"));
-			}});
-		}
-		
-		return list;
-	}
-
-	@Override
-	public String getValue(Integer applicationId, Integer operatorId, Integer cityId,
-			String parameterName, Map<String, String> parameters) throws ServiceException {
-		return null;
-	}
-
-	@Override
-	public Boolean isVisible(Integer applicationId, Integer operatorId, Integer cityId, 
-			String parameterName, Map<String, String> parameters) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Boolean isActive(Integer applicationId, Integer operatorId, Integer cityId, 
-			String parameterName, Map<String, String> parameters) throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<String> checkParameter(String parameterName, Boolean isRequired, Integer applicationId, String groupPrefix,
-			Map<String, String> parameters) throws ServiceException {
-
-		List<String> errors = new LinkedList<String>();
-		
-		errors.addAll(super.checkParameter(parameterName, isRequired, applicationId, groupPrefix, parameters));
-
-		return errors;
-	}
 
 	@Override
 	public void saveForm(Integer applicationId, Integer operatorId, String iPAddress, String groupPrefix, Map<String, String> parameters)
@@ -134,7 +93,7 @@ public class SpaceshipForm extends Form {
 
 		SpaceshipDao spaceshipDao = new SpaceshipDao();
 
-		spaceshipDao.update(mapDaoParameters(parameters));
+		spaceshipDao.update(mapDaoParameters(parameters), applicationId);
 		
 	}
 

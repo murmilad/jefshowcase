@@ -27,7 +27,7 @@ public class EngineTypeFactoryDao extends H2Dao {
 			int type = 1 + (int) (Math.random() * 4);
 
 			RecordDto record = new RecordDto();
-			record.put(ENGINE_TYPE_ID, type);
+			record.put(ENGINE_TYPE_ID, String.valueOf(type));
 			record.put(FACTORY_ID, String.valueOf(i));
 			super.create(record);
 		}
@@ -49,9 +49,9 @@ public class EngineTypeFactoryDao extends H2Dao {
 	                db.prepareStatement(querySQL)) {
 	           ResultSet rs = query.executeQuery();
 	           while (rs.next()) {
-	        	   OptionDto option = new OptionDto(rs.getString(getFields().get(1)), rs.getString(getKey()));
-	        	   for (String key: getFields()) {
-	        		   option.put(key, rs.getString(key));
+	        	   OptionDto option = new OptionDto(rs.getString(getFields().get(1).getName()), rs.getString(getKey()));
+	        	   for (DataField key: getFields()) {
+	        		   option.put(key.getName(), rs.getString(key.getName()));
 	        	   }
 	           }
 	           rs.close();
@@ -75,11 +75,11 @@ public class EngineTypeFactoryDao extends H2Dao {
 	}
 
 	@Override
-	public LinkedList<String> getFields() {
+	public LinkedList<DataField> getFields() throws ServiceException  {
 
-		return new LinkedList<String>(){{
-			add(ENGINE_TYPE_ID);
-			add(FACTORY_ID);
+		return new LinkedList<DataField>(){{
+			add(new DataField(ENGINE_TYPE_ID));
+			add(new DataField(FACTORY_ID));
 		}};
 	}
 
