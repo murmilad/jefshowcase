@@ -31,6 +31,7 @@
 		 	<configuration>
 		    	<interfacePath>${project.basedir}/src/main/resources/jef</interfacePath>
 		    	<htmlPath>${project.build.directory}/${project.build.finalName}</htmlPath>
+		    	<jsPath>${project.build.directory}/${project.build.finalName}/js</jsPath>
 		  	</configuration>
   	      </plugin>
           <plugin>
@@ -39,7 +40,7 @@
     		<version>2.2</version>
             <configuration>
                 <server>Tomcat8</server>
-                <url>http://localhost:8080/manager/text</url>
+                <url>http://localhost:8083/manager/text</url>
 		      	<username>admin</username>
        			<password>password</password>
             </configuration>
