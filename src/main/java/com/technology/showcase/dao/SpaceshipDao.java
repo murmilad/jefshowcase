@@ -29,10 +29,10 @@ public class SpaceshipDao extends H2Dao {
 	public LinkedList<DataField> getFields() throws ServiceException  {
 
 		return new LinkedList<DataField>(){{
-			add(new DataField(SPACESHIP_GALAXY));
-			add(new DataField(SPACESHIP_PLANET));
-			add(new DataField(SPACESHIP_FACTORY));
-			add(new DataField(ENGINE_TYPE));
+			add(new DataField(SPACESHIP_GALAXY, new GalaxyDao()));
+			add(new DataField(SPACESHIP_PLANET, new PlanetDao()));
+			add(new DataField(SPACESHIP_FACTORY, new FactoryDao()));
+			add(new DataField(ENGINE_TYPE, new EngineTypeDao()));
 		}};
 	}
 

@@ -1,8 +1,8 @@
 package com.technology.showcase.dao;
 
 public class DataField {
-	H2Dao linkedTable;
-	String name;
+	H2Dao linkedTable = null;
+	String name = null;
 
 	public DataField(String name) {
 		setName(name);
@@ -10,6 +10,7 @@ public class DataField {
 	
 	public DataField(String name, H2Dao connectedDao) {
 		this(name);
+		setLinkedTable(connectedDao);
 	}
 
 	public H2Dao getLinkedTable() {

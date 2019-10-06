@@ -25,6 +25,7 @@ import org.apache.maven.shared.utils.StringUtils;
 import com.technology.jef.server.dto.OptionDto;
 import com.technology.jef.server.dto.RecordDto;
 import com.technology.jef.server.exceptions.ServiceException;
+import static com.technology.jef.server.serialize.SerializeConstant.*;
 
 public abstract class H2Dao {
 
@@ -165,14 +166,30 @@ public abstract class H2Dao {
 
 		RecordDto result = new RecordDto();
 
+		String joinedParametersList = "";
+		String joinedTablesList = ""; 
+
+ 	   for (DataField key: getFields()) {
+ 		   H2Dao linkedTable = key.getLinkedTable();
+		   if ( linkedTable != null) {
+			   joinedParametersList = joinedParametersList.concat(", " + linkedTable.getTable() + "." + linkedTable.getFields().get(0).getName() + " AS " + linkedTable.getTable() + "_name");
+			   joinedTablesList = joinedTablesList.concat(" INNER JOIN " + linkedTable.getTable() + " ON " + linkedTable.getTable() + "." + linkedTable.getKey() + " = " + key.getName());
+		   }
+	   }
+
 		if (id != null) {
 			try {
 		        try (PreparedStatement query =
-		                db.prepareStatement("SELECT * from " + getTable() +  " WHERE " + getKey() + " = " + id + ";")) {
+		                db.prepareStatement("SELECT " + getTable() + ".* " + joinedParametersList + " from " + getTable() + joinedTablesList + " WHERE " + getTable() + "." + getKey() + " = " + id + ";")) {
 		           ResultSet rs = query.executeQuery();
 		           while (rs.next()) {
 		        	   for (DataField key: getFields()) {
-		        		   result.put(key.getName(), rs.getString(key.getName()));
+		        		   H2Dao linkedTable = key.getLinkedTable();
+		        		   if ( linkedTable != null) {
+		        			   result.put(key.getName(), rs.getString(key.getName()) + PARAMETER_NAME_VALUE_SEPARATOR + rs.getString(linkedTable.getTable() + "_name") );
+		        		   } else {
+		        			   result.put(key.getName(), rs.getString(key.getName()));
+		        		   }
 		        	   }
 		           }
 		           rs.close();

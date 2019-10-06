@@ -30,9 +30,9 @@ public class AddressDao extends H2Dao {
 	public LinkedList<DataField> getFields()  throws ServiceException {
 
 		return new LinkedList<DataField>(){{
-			add(new DataField(GALAXY));
-			add(new DataField(PLANET));
-			add(new DataField(REGION));
+			add(new DataField(GALAXY, new GalaxyDao()));
+			add(new DataField(PLANET, new PlanetDao()));
+			add(new DataField(REGION, new RegionDao()));
 			add(new DataField(REG_POST_INDEX));
 		}};
 	}
