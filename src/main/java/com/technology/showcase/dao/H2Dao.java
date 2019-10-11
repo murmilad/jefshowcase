@@ -206,6 +206,22 @@ public abstract class H2Dao {
 		return result;
 	}
 
+	public void delete(Integer id) throws ServiceException {
+
+
+		if (id != null) {
+			try {
+		        try (PreparedStatement query =
+		                db.prepareStatement("DELETE FROM " + getTable() + " WHERE " +  getKey() + " = " + id + ";")) {
+		           query.execute();
+		        }
+			} catch (SQLException e) {
+				throw new ServiceException(e.getMessage(), e.getCause());
+			}
+		}
+		
+	}
+
 	public List<OptionDto> getOptions() throws ServiceException {
 		List<OptionDto> result = new LinkedList<OptionDto>();
 

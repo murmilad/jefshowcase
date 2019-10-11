@@ -105,6 +105,18 @@ public class SpaceshipForm extends Form {
 	}
 
 	@Override
+	public void deleteForm(Integer primaryId, Integer secondaryId, String iPAddress)
+			throws ServiceException {
+
+		SpaceshipDao spaceshipDao = new SpaceshipDao();
+
+		spaceshipDao.delete(secondaryId);
+		
+	}
+
+	
+	
+	@Override
 	public List<String> getGroups(Integer primaryId) throws ServiceException {
 		SpaceshipDao spaceshipDao = new SpaceshipDao();
 
