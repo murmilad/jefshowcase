@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.technology.showcase.dao.PlanetDao.GALAXY_ID;
 import static com.technology.showcase.dao.RegionDao.PLANET_ID;
@@ -44,13 +45,13 @@ public class SpaceshipForm extends Form {
 
 		return new HashMap<String, Field>(){{
 			put("spaceship_galaxy", new Field(SPACESHIP_GALAXY) {
-				public java.util.List<OptionDto> getListHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+				public List<OptionDto> getListHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
 					GalaxyDao galaxyDao = new GalaxyDao();
 					return  galaxyDao.getOptions();
 				};
 			});
 			put("spaceship_planet", new Field(SPACESHIP_PLANET) {
-				public java.util.List<OptionDto> getListInteractiveHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+				public List<OptionDto> getListInteractiveHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
 					PlanetDao planetDao = new PlanetDao();
 					return  planetDao.getOptions(new RecordDto() {{
 						put(GALAXY_ID, parameters.get("spaceship_galaxy"));
@@ -58,7 +59,7 @@ public class SpaceshipForm extends Form {
 				};
 			});
 			put("spaceship_factory", new Field(SPACESHIP_FACTORY) {
-				public java.util.List<OptionDto> getListInteractiveHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+				public List<OptionDto> getListInteractiveHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
 					FactoryDao factoryDao = new FactoryDao();
 					return  factoryDao.getOptions(new RecordDto() {{
 						put(PLANET_ID, parameters.get("spaceship_planet"));
@@ -66,11 +67,14 @@ public class SpaceshipForm extends Form {
 				};
 			});
 			put("engine_type", new Field(ENGINE_TYPE) {
-				public java.util.List<OptionDto> getListInteractiveHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+				public List<OptionDto> getListInteractiveHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
 					EngineTypeFactoryDao engineTypeFactoryDao = new EngineTypeFactoryDao();
 					return  engineTypeFactoryDao.getEngineTypes(new RecordDto() {{
-						put(FACTORY_ID, parameters.get("factory"));
+						put(FACTORY_ID, parameters.get("spaceship_factory"));
 					}});
+				};
+				public Boolean isVisibleHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
+					return !"".equals(parameters.get("spaceship_factory"));
 				};
 			});
 
@@ -79,25 +83,36 @@ public class SpaceshipForm extends Form {
 
 
 	@Override
-	public void load(Integer applicationId, Integer operatorId, Integer cityId) throws ServiceException {
+	public void load(Integer primaryId, Integer secondaryId) throws ServiceException {
 
 		SpaceshipDao spaceshipDao = new SpaceshipDao();
 
-		setFormData(spaceshipDao.load(applicationId));
+		setFormData(spaceshipDao.load(secondaryId));
 	}
 
 
 	@Override
-	public void saveForm(Integer applicationId, Integer operatorId, String iPAddress, String groupPrefix, Map<String, String> parameters)
+	public Integer saveForm(Integer primaryId, Integer secondaryId, String iPAddress, Map<String, String> parameters)
 			throws ServiceException {
 
 		SpaceshipDao spaceshipDao = new SpaceshipDao();
 
-		spaceshipDao.update(mapDaoParameters(parameters), applicationId);
+		RecordDto record = mapDaoParameters(parameters);
+		record.put(APPLICATION_ID, String.valueOf(primaryId));
+		spaceshipDao.update(record, secondaryId);
 		
+		return primaryId;
 	}
 
+	@Override
+	public List<String> getGroups(Integer primaryId) throws ServiceException {
+		SpaceshipDao spaceshipDao = new SpaceshipDao();
 
+		RecordDto record = new RecordDto();
+		record.put(APPLICATION_ID, primaryId);
+
+		return spaceshipDao.getOptions(record).stream().map(item -> item.getValue().toString()).collect(Collectors.toList());
+	}
 
 }
 		

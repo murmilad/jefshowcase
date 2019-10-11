@@ -33,13 +33,13 @@ public class AddressForm extends Form {
 
 		return new HashMap<String, Field>(){{
 			put("galaxy", new Field(GALAXY) {
-				public java.util.List<OptionDto> getListHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+				public List<OptionDto> getListHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
 					GalaxyDao galaxyDao = new GalaxyDao();
 					return galaxyDao.getOptions();
 				};
 			});
 			put("planet", new Field(PLANET) {
-				public java.util.List<OptionDto> getListInteractiveHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+				public List<OptionDto> getListInteractiveHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
 					PlanetDao planetDao = new PlanetDao();
 					return planetDao.getOptions(new RecordDto() {{
 						put(GALAXY_ID, parameters.get("galaxy"));
@@ -47,7 +47,7 @@ public class AddressForm extends Form {
 				};
 			});
 			put("region", new Field(REGION) {
-				public java.util.List<OptionDto> getListInteractiveHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+				public List<OptionDto> getListInteractiveHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
 					RegionDao regionDao = new RegionDao();
 					return regionDao.getOptions(new RecordDto() {{
 						put(PLANET_ID, parameters.get("planet"));
@@ -55,7 +55,7 @@ public class AddressForm extends Form {
 				};
 			});
 			put("zip", new Field(REG_POST_INDEX) {
-				public String getValueHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+				public String getValueHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
 					String zip = "";
 					RegionDao regionDao = new RegionDao();
 					PlanetDao planetDao = new PlanetDao();
@@ -76,7 +76,7 @@ public class AddressForm extends Form {
 					}
 					return zip;
 				};
-				public java.util.List<String> checkHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+				public List<String> checkHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
 					List<String> errors = new LinkedList<String>();
 					if ("zip".equals(parameterName) && !parameters.get(parameterName).matches("^\\[B@[\\da-f]{8}$")) {
 						errors.add("Incorrect Universe ZIP");
@@ -89,18 +89,18 @@ public class AddressForm extends Form {
 	}
 
 	@Override
-	public void load(Integer applicationId, Integer operatorId, Integer cityId) throws ServiceException {
+	public void load(Integer applicationId, Integer groupId) throws ServiceException {
 		AddressDao addressDao = new AddressDao();
 
 		setFormData(addressDao.load(applicationId));
 	}
 
 	@Override
-	public void saveForm(Integer applicationId, Integer operatorId, String iPAddress, String groupPrefix, Map<String, String> parameters)
+	public Integer saveForm(Integer primaryId, Integer secondaryId, String iPAddress, Map<String, String> parameters)
 			throws ServiceException {
 		AddressDao addressDao = new AddressDao();
 
-		addressDao.update(mapDaoParameters(parameters), applicationId);
+		return addressDao.update(mapDaoParameters(parameters), primaryId);
 	}	
 
 }

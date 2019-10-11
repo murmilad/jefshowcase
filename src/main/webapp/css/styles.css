@@ -194,6 +194,53 @@ span.interface_expand {
     color: #919191;
 }
 
+/* Popup */
+
+.popup {
+    background-color: white;
+    border: 1px solid #333;
+    padding: 20px;
+    height: 85%;
+    left: 25%;
+    margin-left: -50px;
+    margin-top: -50px;
+    position: fixed;
+    top: 10%;
+    width: 50%;
+    z-index: 9999999;
+    overflow: scroll;
+}
+.popup h3{
+	text-align:center;
+}
+.popup #column1{
+	float:left;
+	width:50%;
+}
+.popup #column2{
+	float:right;
+	width:50%;
+}
+.popup  .popuplist_header u{
+	color: #2873b6 !important;
+	font-weight:bold;
+	cursor: pointer;
+	margin-bottom:10px;
+}
+.popuplist_header:hover{
+	color: #100280;
+}
+.popup_close{
+	height: 28px;
+    width: 124px;
+	float:right;
+	cursor: pointer;
+    background: #dddddd;
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 6px;
+}
+
 /* Message boxes */
 
 .background_overlay_wait {

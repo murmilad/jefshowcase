@@ -6,6 +6,7 @@ import com.technology.jef.server.exceptions.ServiceException;
 
 public class SpaceshipDao extends H2Dao {
 
+	public static final String APPLICATION_ID = "application_id";
 	public static final String SPACESHIP_GALAXY = "spaceship_galaxy";
 	public static final String SPACESHIP_PLANET = "spaceship_planet";
 	public static final String SPACESHIP_FACTORY = "spaceship_factory";
@@ -29,6 +30,7 @@ public class SpaceshipDao extends H2Dao {
 	public LinkedList<DataField> getFields() throws ServiceException  {
 
 		return new LinkedList<DataField>(){{
+			add(new DataField(APPLICATION_ID));
 			add(new DataField(SPACESHIP_GALAXY, new GalaxyDao()));
 			add(new DataField(SPACESHIP_PLANET, new PlanetDao()));
 			add(new DataField(SPACESHIP_FACTORY, new FactoryDao()));

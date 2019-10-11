@@ -61,15 +61,14 @@ public class FormWebService{
 	@GET
 	@Path("/get")
 	public FormDto getInterfaceData(
-			@QueryParam(APPLICATION_ID) Integer applicationId,
-			@QueryParam(CITY_ID) Integer cityId,
+			@QueryParam(ID) Integer applicationId,
 			@QueryParam(FORM_API) String formApi
 			) throws ServiceException {
 
 
 		FormDto interfaceData = null;
 		try {
-			interfaceData =  service.getFormData(applicationId, formApi, null, cityId, null);
+			interfaceData =  service.getFormDto(applicationId, formApi, null);
 		} catch ( ServiceException e) {
 			if (e.getCause() instanceof IllegalArgumentException) {
 				interfaceData = new FormDto(new ErrorDto(INCORRECT_PARAMETER_ERROR_CODE, e.getMessage()));
@@ -98,8 +97,7 @@ public class FormWebService{
 	@POST
 	@Path("/get_list")
 	public ListDto<ListItemDto> getListData(
-			@FormParam(APPLICATION_ID) Integer applicationId,
-			@FormParam(CITY_ID) Integer cityId,
+			@FormParam(ID) Integer applicationId,
 			@FormParam(FORM_API) String formApi,
 			@FormParam(PARAMETER_NAME) String parameterName
 			) throws ServiceException {
@@ -109,7 +107,7 @@ public class FormWebService{
 
 		ListDto<ListItemDto> listData = null;
 		try {
-			return new ListDto<ListItemDto>(SERVICE_STATUS_OK, service.getListData(applicationId, formApi, null, cityId, parameterName));
+			return new ListDto<ListItemDto>(SERVICE_STATUS_OK, service.getListData(applicationId, formApi, parameterName));
 			
 		} catch ( ServiceException e) {
 			if (e.getCause() instanceof IllegalArgumentException) {
@@ -138,8 +136,7 @@ public class FormWebService{
 	@POST
 	@Path("/set")
 	public ResultDto setFormData(
-			@FormParam(APPLICATION_ID) Integer applicationId,
-			@FormParam(CITY_ID) Integer cityId,
+			@FormParam(ID) Integer applicationId,
 			@FormParam(PARAMETERS)String parameters
 			) throws ServiceException {
 
@@ -149,7 +146,7 @@ public class FormWebService{
 		ResultDto result = null;
 		try {
 
-			result = service.setFormData(applicationId, cityId, null, iPaddress, parameters);
+			result = service.setFormData(applicationId, iPaddress, parameters);
 		} catch ( ServiceException e) {
 			if (e.getCause() instanceof IllegalArgumentException) {
 				result = new ResultDto(new ErrorDto(INCORRECT_PARAMETER_ERROR_CODE, e.getMessage()));
@@ -180,8 +177,7 @@ public class FormWebService{
 	@POST
 	@Path("/get_list_interactive")
 	public ListDto<ListItemDto> getListData(
-			@FormParam(APPLICATION_ID) Integer applicationId,
-			@FormParam(CITY_ID) Integer cityId,
+			@FormParam(ID) Integer applicationId,
 			@FormParam(FORM_API) String formApi,
 			@FormParam(PARAMETER_NAME) String parameterName,
 			@FormParam(PARAMETERS)String parameters
@@ -192,7 +188,7 @@ public class FormWebService{
 
 		ListDto<ListItemDto> listData = null;
 		try {
-			return new ListDto<ListItemDto>(SERVICE_STATUS_OK, service.getListData(applicationId, formApi, null, cityId, parameterName, listToMap(parameters)));
+			return new ListDto<ListItemDto>(SERVICE_STATUS_OK, service.getListData(applicationId, formApi, parameterName, listToMap(parameters)));
 			
 		} catch ( ServiceException e) {
 			if (e.getCause() instanceof IllegalArgumentException) {
@@ -224,8 +220,7 @@ public class FormWebService{
 	@POST
 	@Path("/get_value_interactive")
 	public ValueDto<String> getValue(
-			@FormParam(APPLICATION_ID) Integer applicationId,
-			@FormParam(CITY_ID) Integer cityId,
+			@FormParam(ID) Integer applicationId,
 			@FormParam(FORM_API) String formApi,
 			@FormParam(PARAMETER_NAME) String parameterName,
 			@FormParam(PARAMETERS) String parameters
@@ -242,7 +237,7 @@ public class FormWebService{
 
 		ValueDto<String> valueData = null;
 		try {
-			return new ValueDto<String>(SERVICE_STATUS_OK, service.getValueData(applicationId, formApi, null, cityId, parameterName, listToMap(parameters)));
+			return new ValueDto<String>(SERVICE_STATUS_OK, service.getValueData(applicationId, formApi, parameterName, listToMap(parameters)));
 			
 		} catch ( ServiceException e) {
 			if (e.getCause() instanceof IllegalArgumentException) {
@@ -274,8 +269,7 @@ public class FormWebService{
 	@POST
 	@Path("/get_is_visible_interactive")
 	public ValueDto<Boolean> getIsVisible(
-			@FormParam(APPLICATION_ID) Integer applicationId,
-			@FormParam(CITY_ID) Integer cityId,
+			@FormParam(ID) Integer applicationId,
 			@FormParam(FORM_API) String formApi,
 			@FormParam(PARAMETER_NAME) String parameterName,
 			@FormParam(PARAMETERS) String parameters
@@ -286,7 +280,7 @@ public class FormWebService{
 
 		ValueDto<Boolean> valueData = null;
 		try {
-			return new ValueDto<Boolean>(SERVICE_STATUS_OK, service.getIsVisible(applicationId, formApi, null, cityId, parameterName, listToMap(parameters)));
+			return new ValueDto<Boolean>(SERVICE_STATUS_OK, service.getIsVisible(applicationId, formApi, parameterName, listToMap(parameters)));
 			
 		} catch ( ServiceException e) {
 			if (e.getCause() instanceof IllegalArgumentException) {
@@ -317,8 +311,7 @@ public class FormWebService{
 	@POST
 	@Path("/get_is_active_interactive")
 	public ValueDto<Boolean> getIsActive(
-			@FormParam(APPLICATION_ID) Integer applicationId,
-			@FormParam(CITY_ID) Integer cityId,
+			@FormParam(ID) Integer applicationId,
 			@FormParam(FORM_API) String formApi,
 			@FormParam(PARAMETER_NAME) String parameterName,
 			@FormParam(PARAMETERS) String parameters
@@ -329,7 +322,7 @@ public class FormWebService{
 
 		ValueDto<Boolean> valueData = null;
 		try {
-			return new ValueDto<Boolean>(SERVICE_STATUS_OK, service.getIsActive(applicationId, formApi, null, cityId, parameterName, listToMap(parameters)));
+			return new ValueDto<Boolean>(SERVICE_STATUS_OK, service.getIsActive(applicationId, formApi, parameterName, listToMap(parameters)));
 			
 		} catch ( ServiceException e) {
 			if (e.getCause() instanceof IllegalArgumentException) {

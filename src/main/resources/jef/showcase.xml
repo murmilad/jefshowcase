@@ -14,9 +14,9 @@
 			</group>
 
 			<group id="address" name="Address" parrent_api="ABOUT_ME">
-				<form_item type="auto_complete_editable" id="galaxy"          name="Galaxy"	width="260px"	required="1" maxlength="255" api="ADDRESS"/>
-				<form_item type="auto_complete_editable" id="planet"          name="Planet"	width="260px"	required="1" maxlength="255" api="ADDRESS" ajax_list_parrent="galaxy"/>
-				<form_item type="auto_complete_editable" id="region"          name="Region"	width="260px"	             maxlength="255" api="ADDRESS" ajax_list_parrent="planet"/>
+				<form_item type="auto_complete_editable" id="galaxy"          name="Galaxy"	width="260px"	required="1"  api="ADDRESS"/>
+				<form_item type="auto_complete_editable" id="planet"          name="Planet"	width="260px"	required="1"  api="ADDRESS" ajax_list_parrent="galaxy"/>
+				<form_item type="auto_complete_editable" id="region"          name="Region"	width="260px"	              api="ADDRESS" ajax_list_parrent="galaxy,planet"/>
 				<form_item type="anytext"                id="zip"             name="ZIP" 	width="150px"   required="1" maxlength="11"   api="ADDRESS" ajax_value_parrent="galaxy,planet,region"/>
 			</group>
 
@@ -36,12 +36,12 @@
 			</group>
 
 			<group id="spaceships" name="Spaceship" is_multiplie="true" parrent_api="ABOUT_ME" api="SPACESHIP">
-				<form_item type="auto_complete_editable" id="spaceship_galaxy"          name="Production galaxy"	width="500px"	required="1" maxlength="255" />
-				<form_item type="auto_complete_editable" id="spaceship_planet"          name="Production planet"	width="500px"	required="1" maxlength="255" />
+				<form_item type="auto_complete_editable" id="spaceship_galaxy"          name="Production galaxy"	width="500px"	required="1"  />
+				<form_item type="auto_complete_editable" id="spaceship_planet"          name="Production planet"	width="500px"	required="1"  ajax_list_parrent="spaceship_galaxy" />
 
-				<form_item type="popup_list"             id="spaceship_factory"         name="Spaceship factory"	width="500px"	required="1" maxlength="255" />
+				<form_item type="popup_list"             id="spaceship_factory"         name="Spaceship factory"	width="990px"	required="1"  ajax_list_parrent="spaceship_galaxy,spaceship_planet" />
 				
-				<form_item type="auto_complete"          id="engine_type"               name="Engin type"           width="303px"  />
+				<form_item type="short_radio_switch"     id="engine_type"    name="Engine type" width="990px"  ajax_list_parrent="spaceship_galaxy,spaceship_planet,spaceship_factory" ajax_visible_parrent="spaceship_galaxy,spaceship_planet,spaceship_factory"/>
 			</group>
 		</form>
 

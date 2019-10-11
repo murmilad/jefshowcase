@@ -3,8 +3,10 @@ package com.technology.showcase.dao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.technology.jef.server.dto.OptionDto;
 import com.technology.jef.server.dto.RecordDto;
@@ -22,19 +24,24 @@ public class EngineTypeFactoryDao extends H2Dao {
 	@Override
 	public void init() throws ServiceException {
 		super.init();
-		for (int i = 1; i<=75; i++) {
+		List<Integer> uniqueList = new LinkedList<Integer>(); 
+		for(int i = 1; i < 5; i++){
+			uniqueList.add(i+1);
+		}
+		for (int i = 1; i<=100; i++) {
+			Collections.shuffle(uniqueList);
 
-			int type = 1 + (int) (Math.random() * 4);
-
-			RecordDto record = new RecordDto();
-			record.put(ENGINE_TYPE_ID, String.valueOf(type));
-			record.put(FACTORY_ID, String.valueOf(i));
-			super.create(record);
+			for (int j = 1; j<=1 + (int) (Math.random() * 3); j++) {
+				RecordDto record = new RecordDto();
+				record.put(ENGINE_TYPE_ID, String.valueOf(uniqueList.get(j)));
+				record.put(FACTORY_ID, String.valueOf(i));
+				super.create(record);
+			}
 		}
 	}
 	
 	public List<OptionDto> getEngineTypes(RecordDto request) throws ServiceException {
-		List<OptionDto> result = super.getOptions(request);
+		List<OptionDto> result = new LinkedList<OptionDto>();
 
 		try {
 			String querySQL = "SELECT engine_type.id, engine_type.name from " + getTable() + 
@@ -49,10 +56,7 @@ public class EngineTypeFactoryDao extends H2Dao {
 	                db.prepareStatement(querySQL)) {
 	           ResultSet rs = query.executeQuery();
 	           while (rs.next()) {
-	        	   OptionDto option = new OptionDto(rs.getString(getFields().get(1).getName()), rs.getString(getKey()));
-	        	   for (DataField key: getFields()) {
-	        		   option.put(key.getName(), rs.getString(key.getName()));
-	        	   }
+	        	   result.add(new OptionDto(rs.getString("name"), rs.getString("id")));
 	           }
 	           rs.close();
 	        }            

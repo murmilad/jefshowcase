@@ -29,7 +29,7 @@ public class MultiPassForm extends Form {
 
 		return new HashMap<String, Field>(){{
 			put("has_multipass", new Field(HAS_MULTIPASS) {
-				public java.util.List<OptionDto> getListHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+				public List<OptionDto> getListHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
 					return new LinkedList<OptionDto> () {{
 						add(new OptionDto("Yes", 1));
 						add(new OptionDto("No", 0));
@@ -38,7 +38,7 @@ public class MultiPassForm extends Form {
 				};
 			});
 			put("multipass_id", new Field(MULTIPASS_ID) {
-				public java.util.List<String> checkHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+				public List<String> checkHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
 					List<String> errors = new LinkedList<String>();
 					
 					if ("multipass_id".equals(parameterName) && !parameters.get(parameterName).matches("^\\w{2}\\d{7}$")) {
@@ -47,7 +47,7 @@ public class MultiPassForm extends Form {
 					
 					return errors;
 				};
-				public Boolean isVisibleHandler(String parameterName, java.util.Map<String,String> parameters) throws ServiceException {
+				public Boolean isVisibleHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
 					return "1".equals(parameters.get("has_multipass"));
 				};
 			});
@@ -56,7 +56,7 @@ public class MultiPassForm extends Form {
 	}
 
 	@Override
-	public void load(Integer applicationId, Integer operatorId, Integer cityId) throws ServiceException {
+	public void load(Integer applicationId, Integer groupId) throws ServiceException {
 		MultiPassDao multiPassDao = new MultiPassDao();
 
 		setFormData(multiPassDao.load(applicationId));
@@ -64,11 +64,11 @@ public class MultiPassForm extends Form {
 
 
 	@Override
-	public void saveForm(Integer applicationId, Integer operatorId, String iPAddress, String groupPrefix, Map<String, String> parameters)
+	public Integer saveForm(Integer primaryId, Integer secondaryId, String iPAddress, Map<String, String> parameters)
 			throws ServiceException {
 		MultiPassDao multiPassDao = new MultiPassDao();
 
-		multiPassDao.update(mapDaoParameters(parameters), applicationId);
+		return multiPassDao.update(mapDaoParameters(parameters), primaryId);
 	}	
 
 }
