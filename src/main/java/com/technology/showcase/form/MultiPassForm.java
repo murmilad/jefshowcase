@@ -41,8 +41,8 @@ public class MultiPassForm extends Form {
 				public List<String> checkHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
 					List<String> errors = new LinkedList<String>();
 					
-					if ("multipass_id".equals(parameterName) && !parameters.get(parameterName).matches("^\\w{2}\\d{7}$")) {
-						errors.add("Incorrect Universe Pass");
+					if ("1".equals(parameters.get("has_multipass")) && !parameters.get(parameterName).matches("^\\w{2}\\d{7}$")) {
+						errors.add("Incorrect Universe Pass. Must be 2 letters and 7 digits");
 					} 
 					
 					return errors;
@@ -50,13 +50,17 @@ public class MultiPassForm extends Form {
 				public Boolean isVisibleHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
 					return "1".equals(parameters.get("has_multipass"));
 				};
+				public Boolean isRequiredHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
+					return "1".equals(parameters.get("has_multipass"));
+					
+				};
 			});
 
 		}};
 	}
 
 	@Override
-	public void load(Integer applicationId, Integer groupId) throws ServiceException {
+	public void load(Integer applicationId, Integer secondaryId, Map<String, String> parameters) throws ServiceException {
 		MultiPassDao multiPassDao = new MultiPassDao();
 
 		setFormData(multiPassDao.load(applicationId));
@@ -64,7 +68,7 @@ public class MultiPassForm extends Form {
 
 
 	@Override
-	public Integer saveForm(Integer primaryId, Integer secondaryId, String iPAddress, Map<String, String> parameters)
+	public Integer saveForm(Integer primaryId, Integer secondaryId, Map<String, String> parameters)
 			throws ServiceException {
 		MultiPassDao multiPassDao = new MultiPassDao();
 

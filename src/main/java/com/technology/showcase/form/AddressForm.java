@@ -89,14 +89,14 @@ public class AddressForm extends Form {
 	}
 
 	@Override
-	public void load(Integer applicationId, Integer groupId) throws ServiceException {
+	public void load(Integer id, Integer secondaryId,  Map<String, String> parameters) throws ServiceException {
 		AddressDao addressDao = new AddressDao();
 
-		setFormData(addressDao.load(applicationId));
+		setFormData(addressDao.load(id));
 	}
 
 	@Override
-	public Integer saveForm(Integer primaryId, Integer secondaryId, String iPAddress, Map<String, String> parameters)
+	public Integer saveForm(Integer primaryId, Integer secondaryId, Map<String, String> parameters)
 			throws ServiceException {
 		AddressDao addressDao = new AddressDao();
 

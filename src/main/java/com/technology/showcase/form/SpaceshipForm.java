@@ -83,7 +83,7 @@ public class SpaceshipForm extends Form {
 
 
 	@Override
-	public void load(Integer primaryId, Integer secondaryId) throws ServiceException {
+	public void load(Integer primaryId, Integer secondaryId, Map<String, String> parameters) throws ServiceException {
 
 		SpaceshipDao spaceshipDao = new SpaceshipDao();
 
@@ -92,7 +92,7 @@ public class SpaceshipForm extends Form {
 
 
 	@Override
-	public Integer saveForm(Integer primaryId, Integer secondaryId, String iPAddress, Map<String, String> parameters)
+	public Integer saveForm(Integer primaryId, Integer secondaryId, Map<String, String> parameters)
 			throws ServiceException {
 
 		SpaceshipDao spaceshipDao = new SpaceshipDao();
@@ -105,7 +105,7 @@ public class SpaceshipForm extends Form {
 	}
 
 	@Override
-	public void deleteForm(Integer primaryId, Integer secondaryId, String iPAddress)
+	public void deleteForm(Integer primaryId, Integer secondaryId)
 			throws ServiceException {
 
 		SpaceshipDao spaceshipDao = new SpaceshipDao();

@@ -55,19 +55,20 @@ public class AboutMeForm extends Form {
 	}
 
 	@Override
-	public void load(Integer applicationId, Integer groupId) throws ServiceException {
+	public void load(Integer id, Integer secondaryId, Map<String, String> parameters) throws ServiceException {
 		AboutMeDao aboutMeDao = new AboutMeDao();
 
-		setFormData(aboutMeDao.load(applicationId));
+		setFormData(aboutMeDao.load(id));
 	}
 
 	@Override
-	public Integer saveForm(Integer primaryId, Integer secondaryId, String iPAddress, Map<String, String> parameters)
+	public Integer saveForm(Integer primaryId, Integer secondaryId, Map<String, String> parameters)
 			throws ServiceException {
 		AboutMeDao aboutMeDao = new AboutMeDao();
 
 		return aboutMeDao.update(mapDaoParameters(parameters), primaryId);
-	}	
+	}
+
 
 }
 		
