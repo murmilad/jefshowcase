@@ -30,8 +30,8 @@
 	        </executions>
 		 	<configuration>
 		    	<interfacePath>${project.basedir}/src/main/resources/jef</interfacePath>
-		    	<htmlPath>/src/main/webapp</htmlPath>
-		    	<jsPath>/src/main/webapp/js</jsPath>
+		    	<htmlPath>${project.basedir}/src/main/webapp</htmlPath>
+		    	<jsPath>${project.basedir}/src/main/webapp/js</jsPath>
 		    	<locale>en_US</locale>
 		  	</configuration>
   	      </plugin>
