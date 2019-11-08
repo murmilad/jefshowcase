@@ -40,7 +40,7 @@ public abstract class H2Dao {
 		try {
 			if (db == null || db.isClosed()) {
 					Context ctx = new InitialContext();
-					DataSource ds = (DataSource) ctx.lookup("java:/comp/env/jdbc/showcaseDS");
+					DataSource ds = (DataSource) ctx.lookup("jdbc/showcaseDS");
 		
 					setDb(ds.getConnection());
 			}
