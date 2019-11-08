@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<interface service="/JefShowcase/rest/form/" id="showcase" name="Showcase" >
+<interface service="rest/form/" id="showcase" name="Showcase" >
        <forms >
 		<form id="showcase" >
 			<form_item type="info" width="1035px"  id="current_date" name="Currtent date" api="ABOUT_ME"/>
