@@ -1,5 +1,5 @@
 <Context>
-	<Resource name="jdbc_showcaseDS" auth="Container"
+	<Resource name="jdbc/showcaseDS" auth="Container"
         type="javax.sql.DataSource"
         driverClassName="org.h2.Driver"
         url="jdbc:h2:mem:showcase"
@@ -7,7 +7,4 @@
         maxActive="20" maxIdle="10" maxWait="-1"
         description="Datasource to showcase database"  />
 
-	<ResourceLink name="jdbc/showcaseDS"
-    global="jdbc_showcaseDS"
-    type="javax.sql.DataSource"/>
 </Context>
