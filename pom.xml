@@ -61,14 +61,6 @@
                                 <version>8.5.47.2</version>
                                 <destFileName>webapp-runner.jar</destFileName>
                             </artifactItem>
-                        </artifactItems>
-                    </configuration>
-                </execution>
-                <execution>
-                    <phase>package</phase>
-                    <goals><goal>copy</goal></goals>
-                    <configuration>
-                        <artifactItems>
                             <artifactItem>
 							  <groupId>org.apache.commons</groupId>
 							  <artifactId>commons-dbcp2</artifactId>
@@ -76,7 +68,7 @@
                             </artifactItem>
                         </artifactItems>
                     </configuration>
-                    </execution>
+                </execution>
             </executions>
         </plugin>
     </plugins>
