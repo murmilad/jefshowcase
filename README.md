@@ -5,5 +5,5 @@ Showcase for JEF framework
  - Jersey rest service
  - H2 database
 ## Demonstration link
-<a href="https://jefshowcase.herokuapp.com/showcase.html">JefShowcase (Heroku)</a>
+<a target="_blank" href="https://jefshowcase.herokuapp.com/showcase.html">JefShowcase (Heroku)</a>
 
