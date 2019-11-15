@@ -10,11 +10,11 @@
 
 			<group id="about_me" name="About me">
 				<form_item type="text"                         id="first_name"                 name="First name"                    width="350px"  api="ABOUT_ME"/>
-				<form_item type="text"                         id="last_name"                  name="Last name"                     width="350px"  api="ABOUT_ME"/>
+				<form_item type="text"                         id="last_name"                  name="Last name"                     width="350px"  required="1"  api="ABOUT_ME"/>
 				<form_item type="short_radio_switch"           id="gender"                     name="Gender"                        width="250px"  api="ABOUT_ME"/>
 				<form_item type="checkbox"                     id="name_changed_upon_marriage" name="Name changed upon marriage"    width="201px"  api="ABOUT_ME"/>
 				<form_item type="text"                         id="birth_name"                 name="Birth name"                    width="355px"  api="ABOUT_ME" ajax_visible_parrent="name_changed_upon_marriage"/>
-				<form_item type="auto_complete"                id="social_status_id"           name="Social status"                 width="363px"  api="ABOUT_ME"/>
+				<form_item type="auto_complete"                id="social_status_id"           name="Social status"                 width="363px"  required="1" api="ABOUT_ME"/>
 			</group>
 
 			<group id="address" name="Address" parrent_api="ABOUT_ME">
