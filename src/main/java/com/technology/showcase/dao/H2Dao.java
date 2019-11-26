@@ -280,7 +280,7 @@ public abstract class H2Dao {
 				dataQuery.execute(
 	            	"DROP TABLE IF EXISTS " + getTable() + "; CREATE TABLE " + getTable() + 
 	            	" (" + getKey() + " int AUTO_INCREMENT primary key, " +
-	            	String.join(" varchar(250),", getFields().stream().map(field  -> field.getName()).collect(Collectors.toList())) + " varchar(50));"
+	            	String.join(" ,", getFields().stream().map(field  -> field.getName() + " " + field.getType()).collect(Collectors.toList())) + " );"
 	            );
 				dataQuery.close();
 			}

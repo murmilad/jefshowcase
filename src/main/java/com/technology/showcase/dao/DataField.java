@@ -1,6 +1,6 @@
 package com.technology.showcase.dao;
 
-public class DataField {
+public abstract class DataField {
 	H2Dao linkedTable = null;
 	String name = null;
 
@@ -25,4 +25,6 @@ public class DataField {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public abstract String getType(); 
 }

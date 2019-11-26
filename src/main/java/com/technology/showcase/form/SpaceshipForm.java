@@ -77,6 +77,7 @@ public class SpaceshipForm extends Form {
 					return !"".equals(parameters.get("spaceship_factory"));
 				};
 			});
+			put("document", new Field(DOCUMENT));
 
 		}};
 	}

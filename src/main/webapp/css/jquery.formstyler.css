@@ -13,7 +13,7 @@
 	background: #E50029;
 }
 .jq-checkbox.focused {
-	border: 1px solid #BF0028;
+	border: 1px solid #100280;
 }
 .jq-checkbox.disabled {
 	opacity: 0.55;
@@ -37,7 +37,7 @@
 	background: #E50029;
 }
 .jq-radio.focused {
-	border: 1px solid #BF0028;
+	border: 1px solid #100280;
 }
 .jq-radio.disabled {
 	opacity: 0.55;
@@ -75,7 +75,7 @@
 	background: #FFF;
 }
 .focused .jq-file__name {
-	border: 1px solid #BF0028;
+	border: 1px solid #100280;
 }
 .jq-file__browse {
 	position: absolute;
@@ -131,7 +131,7 @@
 	box-shadow: inset 1px 1px 3px #DDD;
 }
 .jq-selectbox.focused .jq-selectbox__select {
-	border: 1px solid #BF0028;
+	border: 1px solid #100280;
 }
 .jq-selectbox.disabled .jq-selectbox__select {
 	border-color: #CCC;
@@ -239,7 +239,7 @@
 	cursor: default;
 }
 .jq-select-multiple.focused {
-	border: 1px solid #BF0028;
+	border: 1px solid #100280;
 }
 .jq-select-multiple.disabled {
 	border-color: #CCC;

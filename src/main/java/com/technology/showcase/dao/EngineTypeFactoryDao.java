@@ -82,8 +82,8 @@ public class EngineTypeFactoryDao extends H2Dao {
 	public LinkedList<DataField> getFields() throws ServiceException  {
 
 		return new LinkedList<DataField>(){{
-			add(new DataField(ENGINE_TYPE_ID));
-			add(new DataField(FACTORY_ID));
+			add(new DataFieldString(ENGINE_TYPE_ID));
+			add(new DataFieldString(FACTORY_ID));
 		}};
 	}
 

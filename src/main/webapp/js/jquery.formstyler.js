@@ -14,8 +14,8 @@
 
 		var opt = $.extend({
 			idSuffix: '-styler',
-			filePlaceholder: 'Файл не выбран',
-			browseText: 'Обзор...',
+			filePlaceholder: 'Please, select a file',
+			browseText: 'Choose...',
 			selectVisibleOptions: 0,
 			singleSelectzIndex: '100',
 			selectSmartPositioning: true
@@ -42,7 +42,7 @@
 					if (el.parent('div.jq-checkbox').length < 1) {
 						var checkbox = $('<div' + id + ' class="jq-checkbox' + cl + '"' + title + '><div class="jq-checkbox__div"></div></div>');
 
-						// прячем оригинальный чекбокс
+						// РїСЂСЏС‡РµРј РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ С‡РµРєР±РѕРєСЃ
 						el.css({
 							position: 'absolute',
 							zIndex: '-10',
@@ -64,7 +64,7 @@
 						if (el.is(':checked')) checkbox.addClass('checked');
 						if (el.is(':disabled')) checkbox.addClass('disabled');
 
-						// клик на псевдочекбокс
+						// РєР»РёРє РЅР° РїСЃРµРІРґРѕС‡РµРєР±РѕРєСЃ
 						checkbox.click(function() {
 							if (!checkbox.is('.disabled')) {
 								if (el.is(':checked')) {
@@ -80,17 +80,17 @@
 								return false;
 							}
 						});
-						// клик на label
+						// РєР»РёРє РЅР° label
 						el.closest('label').add('label[for="' + el.attr('id') + '"]').click(function(e) {
 							checkbox.click();
 							e.preventDefault();
 						});
-						// переключение по Space или Enter
+						// РїРµСЂРµРєР»СЋС‡РµРЅРёРµ РїРѕ Space РёР»Рё Enter
 						el.change(function() {
 							if (el.is(':checked')) checkbox.addClass('checked');
 							else checkbox.removeClass('checked');
 						})
-						// чтобы переключался чекбокс, который находится в теге label
+						// С‡С‚РѕР±С‹ РїРµСЂРµРєР»СЋС‡Р°Р»СЃСЏ С‡РµРєР±РѕРєСЃ, РєРѕС‚РѕСЂС‹Р№ РЅР°С…РѕРґРёС‚СЃСЏ РІ С‚РµРіРµ label
 						.keydown(function(e) {
 							if (e.which == 13 || e.which == 32) checkbox.click();
 						})
@@ -100,7 +100,7 @@
 						.blur(function() {
 							checkbox.removeClass('focused');
 						})
-						// обновление при динамическом изменении
+						// РѕР±РЅРѕРІР»РµРЅРёРµ РїСЂРё РґРёРЅР°РјРёС‡РµСЃРєРѕРј РёР·РјРµРЅРµРЅРёРё
 						.on('refresh', function() {
 							if (el.is(':checked')) checkbox.addClass('checked');
 								else checkbox.removeClass('checked');
@@ -116,7 +116,7 @@
 					if (el.parent('div.jq-radio').length < 1) {
 						var radio = $('<div' + id + ' class="jq-radio' + cl + '"' + title + '><div class="jq-radio__div"></div></div>');
 
-						// прячем оригинальную радиокнопку
+						// РїСЂСЏС‡РµРј РѕСЂРёРіРёРЅР°Р»СЊРЅСѓСЋ СЂР°РґРёРѕРєРЅРѕРїРєСѓ
 						el.css({
 							position: 'absolute',
 							zIndex: '-1',
@@ -136,7 +136,7 @@
 						if (el.is(':checked')) radio.addClass('checked');
 						if (el.is(':disabled')) radio.addClass('disabled');
 
-						// клик на псевдорадиокнопке
+						// РєР»РёРє РЅР° РїСЃРµРІРґРѕСЂР°РґРёРѕРєРЅРѕРїРєРµ
 						radio.click(function() {
 							if (!radio.is('.disabled')) {
 								radio.closest('form').find('input[name="' + el.attr('name') + '"]').prop('checked', false).parent().removeClass('checked');
@@ -147,12 +147,12 @@
 								return false;
 							}
 						});
-						// клик на label
+						// РєР»РёРє РЅР° label
 						el.closest('label').add('label[for="' + el.attr('id') + '"]').click(function(e) {
 							radio.click();
 							e.preventDefault();
 						});
-						// переключение стрелками
+						// РїРµСЂРµРєР»СЋС‡РµРЅРёРµ СЃС‚СЂРµР»РєР°РјРё
 						el.change(function() {
 							el.parent().addClass('checked');
 						})
@@ -162,7 +162,7 @@
 						.blur(function() {
 							radio.removeClass('focused');
 						})
-						// обновление при динамическом изменении
+						// РѕР±РЅРѕРІР»РµРЅРёРµ РїСЂРё РґРёРЅР°РјРёС‡РµСЃРєРѕРј РёР·РјРµРЅРµРЅРёРё
 						.on('refresh', function() {
 							if (el.is(':checked')) {
 								$('input[name="' + el.attr('name') + '"]').parent().removeClass('checked');
@@ -198,7 +198,7 @@
 						.click(function() {
 							file.removeClass('focused');
 						})
-						// обновление при динамическом изменении
+						// РѕР±РЅРѕРІР»РµРЅРёРµ РїСЂРё РґРёРЅР°РјРёС‡РµСЃРєРѕРј РёР·РјРµРЅРµРЅРёРё
 						.on('refresh', function() {
 							if (el.is(':disabled')) file.addClass('disabled');
 								else file.removeClass('disabled');
@@ -213,7 +213,7 @@
 
 						function selectbox() {
 
-							// запрещаем прокрутку страницы при прокрутке селекта
+							// Р·Р°РїСЂРµС‰Р°РµРј РїСЂРѕРєСЂСѓС‚РєСѓ СЃС‚СЂР°РЅРёС†С‹ РїСЂРё РїСЂРѕРєСЂСѓС‚РєРµ СЃРµР»РµРєС‚Р°
 							function preventScrolling(selector) {
 								selector.unbind('mousewheel DOMMouseScroll').bind('mousewheel DOMMouseScroll', function(e) {
 									var scrollTo = null;
@@ -225,7 +225,7 @@
 
 							var option = $('option', el);
 							var list = '';
-							// формируем список селекта
+							// С„РѕСЂРјРёСЂСѓРµРј СЃРїРёСЃРѕРє СЃРµР»РµРєС‚Р°
 							function makeList() {
 								for (i = 0, len = option.length; i < len; i++) {
 									var li = '',
@@ -251,7 +251,7 @@
 
 									li = '<li' + dataJqfsClass + dataList + ' class="' + liClass + optionClass + '">'+ option.eq(i).text() +'</li>';
 
-									// если есть optgroup
+									// РµСЃР»Рё РµСЃС‚СЊ optgroup
 									if (option.eq(i).parent().is('optgroup')) {
 										if (option.eq(i).parent().attr('class') !== undefined) optgroupClass = ' ' + option.eq(i).parent().attr('class');
 										li = '<li' + dataJqfsClass + ' class="' + liClass + optionClass + ' option' + optgroupClass + '">'+ option.eq(i).text() +'</li>';
@@ -264,7 +264,7 @@
 								}
 							} // end makeList()
 
-							// одиночный селект
+							// РѕРґРёРЅРѕС‡РЅС‹Р№ СЃРµР»РµРєС‚
 							function doSelect() {
 								var selectbox =
 									$('<div' + id + ' class="jq-selectbox jqselect' + cl + '" style="display: inline-block; position: relative; z-index:' + opt.singleSelectzIndex + '">'+
@@ -274,16 +274,16 @@
 											'</div>'+
 										'</div>');
 
-								// .jq-selectbox-wrapper необходим для того, чтобы избавиться от горизонтальной прокрутки,
-								// появляемой из-за свойства position: absolute, которое добавлено к селекту,
-								// например, когда ширина селекта = 100%
+								// .jq-selectbox-wrapper РЅРµРѕР±С…РѕРґРёРј РґР»СЏ С‚РѕРіРѕ, С‡С‚РѕР±С‹ РёР·Р±Р°РІРёС‚СЊСЃСЏ РѕС‚ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕР№ РїСЂРѕРєСЂСѓС‚РєРё,
+								// РїРѕСЏРІР»СЏРµРјРѕР№ РёР·-Р·Р° СЃРІРѕР№СЃС‚РІР° position: absolute, РєРѕС‚РѕСЂРѕРµ РґРѕР±Р°РІР»РµРЅРѕ Рє СЃРµР»РµРєС‚Сѓ,
+								// РЅР°РїСЂРёРјРµСЂ, РєРѕРіРґР° С€РёСЂРёРЅР° СЃРµР»РµРєС‚Р° = 100%
 								el.wrap('<div class="jq-selectbox-wrapper" style="position: relative"></div>').after(selectbox);
 
 								var divSelect = $('div.jq-selectbox__select', selectbox);
 								var divText = $('div.jq-selectbox__select-text', selectbox);
 								var optionSelected = option.filter(':selected');
 
-								// берем опцию по умолчанию
+								// Р±РµСЂРµРј РѕРїС†РёСЋ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 								if (optionSelected.length) {
 									divText.text(optionSelected.text());
 								} else {
@@ -298,30 +298,30 @@
 								selectbox.append(dropdown);
 								var li = $('li', dropdown);
 
-								// определяем самый широкий пункт селекта
+								// РѕРїСЂРµРґРµР»СЏРµРј СЃР°РјС‹Р№ С€РёСЂРѕРєРёР№ РїСѓРЅРєС‚ СЃРµР»РµРєС‚Р°
 								var liWidth = 0;
 								li.each(function() {
 									$(this).css({'display': 'inline-block', 'white-space': 'nowrap'});
 									if ($(this).width() > liWidth) liWidth = $(this).width();
 									$(this).css({'display': 'block', 'white-space': 'normal'});
 								});
-								// определяем, указана ли ширина селекта
+								// РѕРїСЂРµРґРµР»СЏРµРј, СѓРєР°Р·Р°РЅР° Р»Рё С€РёСЂРёРЅР° СЃРµР»РµРєС‚Р°
 								var elClone = el.clone().css('width', 'auto').insertAfter(el);
 								var elCloneWidth = elClone.width();
 								elClone.remove();
-								// если ширина селекта не указана
+								// РµСЃР»Рё С€РёСЂРёРЅР° СЃРµР»РµРєС‚Р° РЅРµ СѓРєР°Р·Р°РЅР°
 								if (elCloneWidth == el.width()) {
 									divSelect.width(liWidth);
-								// если ширина селекта указана
+								// РµСЃР»Рё С€РёСЂРёРЅР° СЃРµР»РµРєС‚Р° СѓРєР°Р·Р°РЅР°
 								} else {
 									selectbox.width(el.outerWidth());
 								}
-								// если ширина селекта указана, но есть пункт, ширина которого больше
+								// РµСЃР»Рё С€РёСЂРёРЅР° СЃРµР»РµРєС‚Р° СѓРєР°Р·Р°РЅР°, РЅРѕ РµСЃС‚СЊ РїСѓРЅРєС‚, С€РёСЂРёРЅР° РєРѕС‚РѕСЂРѕРіРѕ Р±РѕР»СЊС€Рµ
 								if (liWidth > dropdown.width()) {
 									dropdown.width(liWidth + dropdown.width() - li.width());
 								}
 
-								// прячем оригинальный селект
+								// РїСЂСЏС‡РµРј РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ СЃРµР»РµРєС‚
 								el.css({position: 'absolute', opacity: 0, height: selectbox.outerHeight()});
 
 								var liSelected = li.filter('.selected');
@@ -333,28 +333,28 @@
 								var position = dropdown.css('top');
 								dropdown.hide();
 
-								// если выбран не дефолтный пункт
+								// РµСЃР»Рё РІС‹Р±СЂР°РЅ РЅРµ РґРµС„РѕР»С‚РЅС‹Р№ РїСѓРЅРєС‚
 								if (liSelected.length) {
-									// добавляем класс, показывающий изменение селекта
+									// РґРѕР±Р°РІР»СЏРµРј РєР»Р°СЃСЃ, РїРѕРєР°Р·С‹РІР°СЋС‰РёР№ РёР·РјРµРЅРµРЅРёРµ СЃРµР»РµРєС‚Р°
 									if (option.first().text() != optionSelected.text()) {
 										selectbox.addClass('changed');
 									}
-									// передаем селекту класс выбранного пункта
+									// РїРµСЂРµРґР°РµРј СЃРµР»РµРєС‚Сѓ РєР»Р°СЃСЃ РІС‹Р±СЂР°РЅРЅРѕРіРѕ РїСѓРЅРєС‚Р°
 									selectbox.data('jqfs-class', liSelected.data('jqfs-class'));
 									selectbox.addClass(liSelected.data('jqfs-class'));
 								}
 
-								// если селект неактивный
+								// РµСЃР»Рё СЃРµР»РµРєС‚ РЅРµР°РєС‚РёРІРЅС‹Р№
 								if (el.is(':disabled')) {
 									selectbox.addClass('disabled');
 									return false;
 								}
 
-								// при клике на псевдоселекте
+								// РїСЂРё РєР»РёРєРµ РЅР° РїСЃРµРІРґРѕСЃРµР»РµРєС‚Рµ
 								divSelect.click(function() {
 									el.focus();
 
-									// умное позиционирование
+									// СѓРјРЅРѕРµ РїРѕР·РёС†РёРѕРЅРёСЂРѕРІР°РЅРёРµ
 									if (opt.selectSmartPositioning) {
 										var win = $(window);
 										var topOffset = selectbox.offset().top;
@@ -363,7 +363,7 @@
 										var	minHeight = liHeight * 6;
 										var	newHeight = liHeight * visible;
 										if (visible > 0 && visible < 6) minHeight =  newHeight;
-										// раскрытие вверх
+										// СЂР°СЃРєСЂС‹С‚РёРµ РІРІРµСЂС…
 										if (bottomOffset < 0 || bottomOffset < minHeight)	{
 											dropdown.height('auto').css({top: 'auto', bottom: position});
 											if (dropdown.outerHeight() > topOffset - win.scrollTop() - 20 ) {
@@ -374,7 +374,7 @@
 													if (dropdown.height() > newHeight) dropdown.height(newHeight);
 												}
 											}
-										// раскрытие вниз
+										// СЂР°СЃРєСЂС‹С‚РёРµ РІРЅРёР·
 										} else if (bottomOffset > minHeight) {
 											dropdown.height('auto').css({bottom: 'auto', top: position});
 											if (dropdown.outerHeight() > bottomOffset - 20 ) {
@@ -399,7 +399,7 @@
 										selectbox.removeClass('opened');
 									}
 
-									// прокручиваем до выбранного пункта при открытии списка
+									// РїСЂРѕРєСЂСѓС‡РёРІР°РµРј РґРѕ РІС‹Р±СЂР°РЅРЅРѕРіРѕ РїСѓРЅРєС‚Р° РїСЂРё РѕС‚РєСЂС‹С‚РёРё СЃРїРёСЃРєР°
 									if (li.filter('.selected').length) {
 										dropdown.scrollTop(dropdown.scrollTop() + li.filter('.selected').position().top - dropdown.innerHeight() / 2 + liHeight / 2);
 									}
@@ -408,14 +408,14 @@
 									return false;
 								});
 
-								// при наведении курсора на пункт списка
+								// РїСЂРё РЅР°РІРµРґРµРЅРёРё РєСѓСЂСЃРѕСЂР° РЅР° РїСѓРЅРєС‚ СЃРїРёСЃРєР°
 								li.hover(function() {
 									$(this).siblings().removeClass('selected');
 								});
 								var selectedText = li.filter('.selected').text();
 								var selText = li.filter('.selected').text();
 
-								// при клике на пункт списка
+								// РїСЂРё РєР»РёРєРµ РЅР° РїСѓРЅРєС‚ СЃРїРёСЃРєР°
 								li.filter(':not(.disabled):not(.optgroup)').click(function() {
 									var t = $(this);
 									var liText = t.text();
@@ -427,14 +427,14 @@
 										selectedText = liText;
 										divText.text(liText);
 
-										// добавляем класс, показывающий изменение селекта
+										// РґРѕР±Р°РІР»СЏРµРј РєР»Р°СЃСЃ, РїРѕРєР°Р·С‹РІР°СЋС‰РёР№ РёР·РјРµРЅРµРЅРёРµ СЃРµР»РµРєС‚Р°
 										if (option.first().text() != liText) {
 											selectbox.addClass('changed');
 										} else {
 											selectbox.removeClass('changed');
 										}
 
-										// передаем селекту класс выбранного пункта
+										// РїРµСЂРµРґР°РµРј СЃРµР»РµРєС‚Сѓ РєР»Р°СЃСЃ РІС‹Р±СЂР°РЅРЅРѕРіРѕ РїСѓРЅРєС‚Р°
 										if (selectbox.data('jqfs-class')) selectbox.removeClass(selectbox.data('jqfs-class'));
 										selectbox.data('jqfs-class', t.data('jqfs-class'));
 										selectbox.addClass(t.data('jqfs-class'));
@@ -448,7 +448,7 @@
 									$('li.sel', dropdown).addClass('selected');
 								});
 
-								// изменение селекта
+								// РёР·РјРµРЅРµРЅРёРµ СЃРµР»РµРєС‚Р°
 								el.change(function() {
 									divText.text(option.filter(':selected').text());
 									li.removeClass('selected sel').not('.optgroup').eq(el[0].selectedIndex).addClass('selected sel');
@@ -459,15 +459,15 @@
 								.blur(function() {
 									selectbox.removeClass('focused');
 								})
-								// прокрутки списка с клавиатуры
+								// РїСЂРѕРєСЂСѓС‚РєРё СЃРїРёСЃРєР° СЃ РєР»Р°РІРёР°С‚СѓСЂС‹
 								.bind('keydown keyup', function(e) {
 									divText.text(option.filter(':selected').text());
 									li.removeClass('selected sel').not('.optgroup').eq(el[0].selectedIndex).addClass('selected sel');
-									// вверх, влево, PageUp
+									// РІРІРµСЂС…, РІР»РµРІРѕ, PageUp
 									if (e.which == 38 || e.which == 37 || e.which == 33) {
 										dropdown.scrollTop(dropdown.scrollTop() + li.filter('.selected').position().top);
 									}
-									// вниз, вправо, PageDown
+									// РІРЅРёР·, РІРїСЂР°РІРѕ, PageDown
 									if (e.which == 40 || e.which == 39 || e.which == 34) {
 										dropdown.scrollTop(dropdown.scrollTop() + li.filter('.selected').position().top - dropdown.innerHeight() + liHeight);
 									}
@@ -476,10 +476,10 @@
 									}
 								});
 
-								// прячем выпадающий список при клике за пределами селекта
+								// РїСЂСЏС‡РµРј РІС‹РїР°РґР°СЋС‰РёР№ СЃРїРёСЃРѕРє РїСЂРё РєР»РёРєРµ Р·Р° РїСЂРµРґРµР»Р°РјРё СЃРµР»РµРєС‚Р°
 								$(document).on('click', function(e) {
-									// e.target.nodeName != 'OPTION' - добавлено для обхода бага в Опере
-									// (при изменении селекта с клавиатуры срабатывает событие onclick)
+									// e.target.nodeName != 'OPTION' - РґРѕР±Р°РІР»РµРЅРѕ РґР»СЏ РѕР±С…РѕРґР° Р±Р°РіР° РІ РћРїРµСЂРµ
+									// (РїСЂРё РёР·РјРµРЅРµРЅРёРё СЃРµР»РµРєС‚Р° СЃ РєР»Р°РІРёР°С‚СѓСЂС‹ СЃСЂР°Р±Р°С‚С‹РІР°РµС‚ СЃРѕР±С‹С‚РёРµ onclick)
 									if (!$(e.target).parents().hasClass('jq-selectbox') && e.target.nodeName != 'OPTION') {
 										dropdown.hide().find('li.sel').addClass('selected');
 										selectbox.removeClass('focused opened');
@@ -488,13 +488,13 @@
 
 							} // end doSelect()
 
-							// мультиселект
+							// РјСѓР»СЊС‚РёСЃРµР»РµРєС‚
 							function doMultipleSelect() {
 								var selectbox = $('<div' + id + ' class="jq-select-multiple jqselect' + cl + '"' + title + ' style="display: inline-block; position: relative"></div>');
 
-								// .jq-selectbox-wrapper необходим для того, чтобы избавиться от горизонтальной прокрутки,
-								// появляемой из-за свойства position: absolute, которое добавлено к селекту,
-								// например, когда ширина селекта = 100%
+								// .jq-selectbox-wrapper РЅРµРѕР±С…РѕРґРёРј РґР»СЏ С‚РѕРіРѕ, С‡С‚РѕР±С‹ РёР·Р±Р°РІРёС‚СЊСЃСЏ РѕС‚ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅРѕР№ РїСЂРѕРєСЂСѓС‚РєРё,
+								// РїРѕСЏРІР»СЏРµРјРѕР№ РёР·-Р·Р° СЃРІРѕР№СЃС‚РІР° position: absolute, РєРѕС‚РѕСЂРѕРµ РґРѕР±Р°РІР»РµРЅРѕ Рє СЃРµР»РµРєС‚Сѓ,
+								// РЅР°РїСЂРёРјРµСЂ, РєРѕРіРґР° С€РёСЂРёРЅР° СЃРµР»РµРєС‚Р° = 100%
 								el.wrap('<div class="jq-selectbox-wrapper" style="position: relative"></div>').after(selectbox);
 
 								makeList();
@@ -512,36 +512,36 @@
 								if (ulHeight > selectbox.height()) {
 									ul.css('overflowY', 'scroll');
 									preventScrolling(ul);
-									// прокручиваем до выбранного пункта
+									// РїСЂРѕРєСЂСѓС‡РёРІР°РµРј РґРѕ РІС‹Р±СЂР°РЅРЅРѕРіРѕ РїСѓРЅРєС‚Р°
 									if (li.filter('.selected').length) {
 										ul.scrollTop(ul.scrollTop() + li.filter('.selected').position().top);
 									}
 								}
 
-								// если селект неактивный
+								// РµСЃР»Рё СЃРµР»РµРєС‚ РЅРµР°РєС‚РёРІРЅС‹Р№
 								if (el.is(':disabled')) {
 									selectbox.addClass('disabled');
 									option.each(function() {
 										if ($(this).is(':selected')) li.eq($(this).index()).addClass('selected');
 									});
-									// устанавливаем ширину псевдоселекта
+									// СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј С€РёСЂРёРЅСѓ РїСЃРµРІРґРѕСЃРµР»РµРєС‚Р°
 									selectbox.width(el.outerWidth());
 									selectbox.width(selectbox.width() - (selectbox.outerWidth() - selectbox.width()));
 
-									// прячем оригинальный селект
+									// РїСЂСЏС‡РµРј РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ СЃРµР»РµРєС‚
 									el.css({position: 'absolute', opacity: 0, height: selectbox.outerHeight()});
 
-								// если селект активный
+								// РµСЃР»Рё СЃРµР»РµРєС‚ Р°РєС‚РёРІРЅС‹Р№
 								} else {
 
-									// устанавливаем ширину псевдоселекта
+									// СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј С€РёСЂРёРЅСѓ РїСЃРµРІРґРѕСЃРµР»РµРєС‚Р°
 									selectbox.width(el.outerWidth());
 									selectbox.width(selectbox.width() - (selectbox.outerWidth() - selectbox.width()));
 
-									// прячем оригинальный селект
+									// РїСЂСЏС‡РµРј РѕСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ СЃРµР»РµРєС‚
 									el.css({position: 'absolute', opacity: 0, height: selectbox.outerHeight()});
 
-									// при клике на пункт списка
+									// РїСЂРё РєР»РёРєРµ РЅР° РїСѓРЅРєС‚ СЃРїРёСЃРєР°
 									li.filter(':not(.disabled):not(.optgroup)').click(function(e) {
 										el.focus();
 										selectbox.removeClass('focused');
@@ -550,14 +550,14 @@
 										if(!e.shiftKey) clkd.addClass('first');
 										if(!e.ctrlKey && !e.shiftKey) clkd.siblings().removeClass('selected first');
 
-										// выделение пунктов при зажатом Ctrl
+										// РІС‹РґРµР»РµРЅРёРµ РїСѓРЅРєС‚РѕРІ РїСЂРё Р·Р°Р¶Р°С‚РѕРј Ctrl
 										if(e.ctrlKey) {
 											if (clkd.is('.selected')) clkd.removeClass('selected first');
 												else clkd.addClass('selected first');
 											clkd.siblings().removeClass('first');
 										}
 
-										// выделение пунктов при зажатом Shift
+										// РІС‹РґРµР»РµРЅРёРµ РїСѓРЅРєС‚РѕРІ РїСЂРё Р·Р°Р¶Р°С‚РѕРј Shift
 										if(e.shiftKey) {
 											var prev = false,
 													next = false;
@@ -583,7 +583,7 @@
 											if (li.filter('.selected').length == 1) clkd.addClass('first');
 										}
 
-										// отмечаем выбранные мышью
+										// РѕС‚РјРµС‡Р°РµРј РІС‹Р±СЂР°РЅРЅС‹Рµ РјС‹С€СЊСЋ
 										option.prop('selected', false);
 										li.filter('.selected').each(function() {
 											var t = $(this);
@@ -595,7 +595,7 @@
 
 									});
 
-									// отмечаем выбранные с клавиатуры
+									// РѕС‚РјРµС‡Р°РµРј РІС‹Р±СЂР°РЅРЅС‹Рµ СЃ РєР»Р°РІРёР°С‚СѓСЂС‹
 									option.each(function(i) {
 										$(this).data('optionIndex', i);
 									});
@@ -616,14 +616,14 @@
 										selectbox.removeClass('focused');
 									});
 
-									// прокручиваем с клавиатуры
+									// РїСЂРѕРєСЂСѓС‡РёРІР°РµРј СЃ РєР»Р°РІРёР°С‚СѓСЂС‹
 									if (ulHeight > selectbox.height()) {
 										el.keydown(function(e) {
-											// вверх, влево, PageUp
+											// РІРІРµСЂС…, РІР»РµРІРѕ, PageUp
 											if (e.which == 38 || e.which == 37 || e.which == 33) {
 												ul.scrollTop(ul.scrollTop() + li.filter('.selected').position().top - liHeight);
 											}
-											// вниз, вправо, PageDown
+											// РІРЅРёР·, РІРїСЂР°РІРѕ, PageDown
 											if (e.which == 40 || e.which == 39 || e.which == 34) {
 												ul.scrollTop(ul.scrollTop() + li.filter('.selected:last').position().top - ul.innerHeight() + liHeight * 2);
 											}
@@ -637,12 +637,12 @@
 
 						selectbox();
 
-						// обновление при динамическом изменении
+						// РѕР±РЅРѕРІР»РµРЅРёРµ РїСЂРё РґРёРЅР°РјРёС‡РµСЃРєРѕРј РёР·РјРµРЅРµРЅРёРё
 						el.on('refresh', function() {
 							el.next().remove();
 							selectbox();
 						});
-						// адаптивная ширина
+						// Р°РґР°РїС‚РёРІРЅР°СЏ С€РёСЂРёРЅР°
 						el.on('adaptiveWidth', function() {
 							el.css({position: 'static'});
 							//el.next().width(el.outerWidth());

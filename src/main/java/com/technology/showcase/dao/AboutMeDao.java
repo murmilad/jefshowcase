@@ -35,12 +35,12 @@ public class AboutMeDao extends H2Dao {
 	public LinkedList<DataField> getFields() throws ServiceException {
 
 		return new LinkedList<DataField>(){{
-			add(new DataField(FIRST_NAME));
-			add(new DataField(LAST_NAME));
-			add(new DataField(GENDER));
-			add(new DataField(NAME_CHANGED_UPON_MARRIAGE));
-			add(new DataField(BIRTH_NAME));
-			add(new DataField(SOCIAL_STATUS_ID, new SocialStatusDao()));
+			add(new DataFieldString(FIRST_NAME));
+			add(new DataFieldString(LAST_NAME));
+			add(new DataFieldString(GENDER));
+			add(new DataFieldString(NAME_CHANGED_UPON_MARRIAGE));
+			add(new DataFieldString(BIRTH_NAME));
+			add(new DataFieldString(SOCIAL_STATUS_ID, new SocialStatusDao()));
 		}};
 	}
 	

@@ -45,8 +45,8 @@ public class PlanetDao extends H2Dao {
 	public LinkedList<DataField> getFields() throws ServiceException  {
 
 		return new LinkedList<DataField>(){{
-			add(new DataField(NAME));
-			add(new DataField(GALAXY_ID));
+			add(new DataFieldString(NAME));
+			add(new DataFieldString(GALAXY_ID));
 		}};
 	}
 

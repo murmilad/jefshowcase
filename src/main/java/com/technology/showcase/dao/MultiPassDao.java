@@ -28,8 +28,8 @@ public class MultiPassDao extends H2Dao {
 	public LinkedList<DataField> getFields() throws ServiceException  {
 
 		return new LinkedList<DataField>(){{
-			add(new DataField(HAS_MULTIPASS));
-			add(new DataField(MULTIPASS_ID));
+			add(new DataFieldString(HAS_MULTIPASS));
+			add(new DataFieldString(MULTIPASS_ID));
 		}};
 	}
 

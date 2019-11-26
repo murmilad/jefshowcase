@@ -49,7 +49,7 @@ public class GalaxyDao extends H2Dao {
 	public LinkedList<DataField> getFields() throws ServiceException  {
 
 		return new LinkedList<DataField>(){{
-			add(new DataField(NAME));
+			add(new DataFieldString(NAME));
 		}};
 	}
 

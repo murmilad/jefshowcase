@@ -11,6 +11,7 @@ public class SpaceshipDao extends H2Dao {
 	public static final String SPACESHIP_PLANET = "spaceship_planet";
 	public static final String SPACESHIP_FACTORY = "spaceship_factory";
 	public static final String ENGINE_TYPE = "engine_type";
+	public static final String DOCUMENT = "document";
 
 	public SpaceshipDao() throws ServiceException {
 		super();
@@ -30,11 +31,12 @@ public class SpaceshipDao extends H2Dao {
 	public LinkedList<DataField> getFields() throws ServiceException  {
 
 		return new LinkedList<DataField>(){{
-			add(new DataField(APPLICATION_ID));
-			add(new DataField(SPACESHIP_GALAXY, new GalaxyDao()));
-			add(new DataField(SPACESHIP_PLANET, new PlanetDao()));
-			add(new DataField(SPACESHIP_FACTORY, new FactoryDao()));
-			add(new DataField(ENGINE_TYPE, new EngineTypeDao()));
+			add(new DataFieldString(APPLICATION_ID));
+			add(new DataFieldClob(DOCUMENT));
+			add(new DataFieldString(SPACESHIP_GALAXY, new GalaxyDao()));
+			add(new DataFieldString(SPACESHIP_PLANET, new PlanetDao()));
+			add(new DataFieldString(SPACESHIP_FACTORY, new FactoryDao()));
+			add(new DataFieldString(ENGINE_TYPE, new EngineTypeDao()));
 		}};
 	}
 

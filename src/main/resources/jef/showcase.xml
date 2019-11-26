@@ -46,6 +46,9 @@
 				<form_item type="popup_list"             id="spaceship_factory"         name="Spaceship factory"	width="990px"	required="1"  ajax_list_parrent="spaceship_galaxy,spaceship_planet" />
 				
 				<form_item type="short_radio_switch"     id="engine_type"    name="Engine type" width="990px"  ajax_list_parrent="spaceship_galaxy,spaceship_planet,spaceship_factory" ajax_visible_parrent="spaceship_galaxy,spaceship_planet,spaceship_factory"/>
+
+				<form_item type="document" id="document" name="Sales Certificate" width="600px" />
+
 			</group>
 		</form>
 
