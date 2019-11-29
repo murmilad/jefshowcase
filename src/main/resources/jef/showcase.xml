@@ -15,6 +15,7 @@
 				<form_item type="checkbox"                     id="name_changed_upon_marriage" name="Name changed upon marriage"    width="201px"  api="ABOUT_ME"/>
 				<form_item type="text"                         id="birth_name"                 name="Birth name"                    width="355px"  api="ABOUT_ME" ajax_visible_parrent="name_changed_upon_marriage"/>
 				<form_item type="auto_complete"                id="social_status_id"           name="Social status"                 width="363px"  required="1" api="ABOUT_ME"/>
+				<form_item type="image"                id="photo"                      name="Photo" width="800px" api="ABOUT_ME"/>
 			</group>
 
 			<group id="address" name="Address" parrent_api="ABOUT_ME">
@@ -47,7 +48,7 @@
 				
 				<form_item type="short_radio_switch"     id="engine_type"    name="Engine type" width="990px"  ajax_list_parrent="spaceship_galaxy,spaceship_planet,spaceship_factory" ajax_visible_parrent="spaceship_galaxy,spaceship_planet,spaceship_factory"/>
 
-				<form_item type="document" id="document" name="Sales Certificate" width="600px" />
+				<form_item type="image" id="document" name="Sales Certificate" width="600px" />
 
 			</group>
 		</form>

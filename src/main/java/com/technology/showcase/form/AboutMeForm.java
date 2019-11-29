@@ -51,6 +51,7 @@ public class AboutMeForm extends Form {
 				};
 			});
 			put("current_date", new Field());
+			put("photo", new Field(PHOTO));
 		}};
 	}
 

@@ -2,6 +2,7 @@ package com.technology.showcase.jersey;
 
 
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -10,6 +11,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.apache.commons.codec.binary.Base64OutputStream;
+import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -28,9 +39,15 @@ import com.technology.jef.server.dto.ValueDto;
 import static com.technology.jef.server.WebServiceConstant.*;
 import static com.technology.jef.server.serialize.SerializeConstant.*;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -373,5 +390,27 @@ public class FormWebService{
 		return parametersMap;
 		
 	}
+
 	
+	
+	/**
+	 * Преобразование потока с картинкой в base64URI. Необходимо для реализации сервиса поддержки виджета Image в IE<10
+	 * 
+	 * @param inputStream Поток картинки
+	 * @return Строка base64URI
+	 * @throws ServiceException
+	 */
+	
+	@POST
+    @Path("/image_to_base64")
+    public Response imageToBase64(
+            @FormDataParam("file") InputStream fileInputStream
+    ) throws ServiceException {
+ 
+
+   	    return Response.ok(service.imageToBase64(fileInputStream), "text/html")
+   	    		.build();
+        
+
+    }	
 }

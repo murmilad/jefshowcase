@@ -16,6 +16,7 @@ public class AboutMeDao extends H2Dao {
 	public static final String BIRTH_NAME = "birth_name";
 	public static final String SOCIAL_STATUS_ID = "social_status_id";
 	public static final String CURRENT_DATE = "current_date";
+	public static final String PHOTO = "photo";
 
 	public AboutMeDao() throws ServiceException {
 		super();
@@ -40,6 +41,7 @@ public class AboutMeDao extends H2Dao {
 			add(new DataFieldString(GENDER));
 			add(new DataFieldString(NAME_CHANGED_UPON_MARRIAGE));
 			add(new DataFieldString(BIRTH_NAME));
+			add(new DataFieldClob(PHOTO));
 			add(new DataFieldString(SOCIAL_STATUS_ID, new SocialStatusDao()));
 		}};
 	}
