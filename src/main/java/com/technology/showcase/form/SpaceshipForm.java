@@ -76,6 +76,9 @@ public class SpaceshipForm extends Form {
 				public Boolean isVisibleHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
 					return !"".equals(parameters.get("spaceship_factory"));
 				};
+				public Boolean isRequiredHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
+					return !"".equals(parameters.get("spaceship_factory"));
+				};
 			});
 			put("document", new Field(DOCUMENT));
 

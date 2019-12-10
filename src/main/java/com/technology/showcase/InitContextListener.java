@@ -5,6 +5,8 @@ import javax.servlet.ServletContextListener;
 
 import com.technology.jef.server.exceptions.ServiceException;
 import com.technology.showcase.dao.AboutMeDao;
+import com.technology.showcase.dao.AchievementPilotDao;
+import com.technology.showcase.dao.AchievementTypeDao;
 import com.technology.showcase.dao.AddressDao;
 import com.technology.showcase.dao.EngineTypeDao;
 import com.technology.showcase.dao.EngineTypeFactoryDao;
@@ -36,6 +38,8 @@ public class InitContextListener implements ServletContextListener {
 			new RegionDao().init();
 			new SocialStatusDao().init();
 			new SpaceshipDao().init();
+			new AchievementPilotDao().init();
+			new AchievementTypeDao().init();
         } catch (ServiceException e) {
 			e.printStackTrace();
         }

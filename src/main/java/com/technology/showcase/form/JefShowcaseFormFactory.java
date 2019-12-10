@@ -29,6 +29,9 @@ public class JefShowcaseFormFactory  extends FormFactory {
 			case SPACESHIP:
 				form = new SpaceshipForm();
 				break;
+			case ACHIEVEMENT:
+				form = new AchievementForm();
+				break;
 				
 			default:
 				throw new ServiceException("Form not found " + name, null);

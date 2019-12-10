@@ -114,7 +114,6 @@ input.interface_del_button{
     border: none;
     padding-left: 10px;
     padding-right: 10px;
-    float: left;
 }
 
 input.interface_add_button{  
@@ -344,3 +343,38 @@ span.interface_expand {
     margin-right: -50%;
     transform: translate(-50%, -50%);
 }
+
+/* navigation */
+
+.tabs_container {
+    display: table;	
+}
+
+div.tab {
+    display: block;
+    float: left;
+    vertical-align: middle;
+    padding: 10px;
+    margin: 5px;
+    background: #bbb;
+    color: white;
+    cursor: pointer;
+}
+
+div:hover.tab, div:active.tab{
+    display: block;
+    float: left;
+    vertical-align: middle;
+    padding: 10px;
+    margin: 5px;
+    background: #100280;
+    color: white;
+    cursor: pointer;
+}
+
+div.current {
+	
+    background: #100280;
+}
+
+

@@ -1,0 +1,99 @@
+
+package com.technology.showcase.form;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import com.technology.jef.server.exceptions.ServiceException;
+import com.technology.jef.server.dto.OptionDto;
+import com.technology.jef.server.dto.RecordDto;
+import com.technology.jef.server.form.Field;
+import com.technology.jef.server.form.Form;
+import com.technology.showcase.dao.AchievementPilotDao;
+import com.technology.showcase.dao.AchievementTypeDao;
+import com.technology.showcase.dao.SpaceshipDao;
+
+/**
+* Interface "Address" controller
+*/
+
+public class AchievementForm extends Form {
+
+	@Override
+	public Map<String, Field> getFieldsMap() {
+
+		return new HashMap<String, Field>(){{
+			put("type", new Field(AchievementPilotDao.ACHIEVEMENT_ID) {
+				public List<OptionDto> getListHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
+					AchievementTypeDao achievementTypeDao = new AchievementTypeDao();
+					return  achievementTypeDao.getOptions();
+				};
+			});
+			put("about", new Field() {
+				public String getValueHandler (String parameterName, Map<String,String> parameters) throws ServiceException {
+					AchievementTypeDao achievementTypeDao = new AchievementTypeDao();
+					RecordDto achievement = achievementTypeDao.load(Integer.parseInt(parameters.get("type")));
+					return  achievement.get(AchievementTypeDao.ABOUT);
+				};
+			});
+			put("image", new Field() {
+				public String getValueHandler (String parameterName, Map<String,String> parameters) throws ServiceException {
+					AchievementTypeDao achievementTypeDao = new AchievementTypeDao();
+					RecordDto achievement = achievementTypeDao.load(Integer.parseInt(parameters.get("type")));
+					return  "<img src='" + achievement.get(AchievementTypeDao.IMAGE) + "' />";
+				};
+			});
+			put("score", new Field(AchievementPilotDao.SCORE));
+
+		}};
+	}
+
+
+	@Override
+	public void load(Integer primaryId, Integer secondaryId, Map<String, String> parameters) throws ServiceException {
+
+		AchievementPilotDao achievementPilotDao = new AchievementPilotDao();
+
+		setFormData(achievementPilotDao.load(secondaryId));
+	}
+
+
+	@Override
+	public Integer saveForm(Integer primaryId, Integer secondaryId, Map<String, String> parameters)
+			throws ServiceException {
+
+		AchievementPilotDao achievementPilot = new AchievementPilotDao();
+
+		RecordDto record = mapDaoParameters(parameters);
+		record.put(AchievementPilotDao.PILOT_ID, String.valueOf(primaryId));
+		achievementPilot.update(record, secondaryId);
+		
+		return primaryId;
+	}
+
+	@Override
+	public void deleteForm(Integer primaryId, Integer secondaryId)
+			throws ServiceException {
+
+		AchievementPilotDao achievementPilot = new AchievementPilotDao();
+
+		achievementPilot.delete(secondaryId);
+		
+	}
+
+	
+	
+	@Override
+	public List<String> getGroups(Integer primaryId) throws ServiceException {
+		AchievementPilotDao achievementPilot = new AchievementPilotDao();
+
+		RecordDto record = new RecordDto();
+		record.put(AchievementPilotDao.PILOT_ID, primaryId);
+
+		return achievementPilot.getOptions(record).stream().map(item -> item.getValue().toString()).collect(Collectors.toList());
+	}
+
+}
+		

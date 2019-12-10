@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<interface service="rest/form/" id="achievements" >
+       <forms >
+		<form id="achievements" >
+			<script type="set">
+				uri_params['id'] = data.id;
+				if (!nextForm) {
+					nextForm = $('div[data-form-id="' + this.id + '"]').next().attr('data-form-id');
+					if (!nextForm) {
+						nextForm = $('div.tab').first().attr('data-form-id');
+					}
+				}
+				loadForm(nextForm);
+				nextForm = '';
+			</script>
+
+			<group id="achievements" name="Achievement" is_multiplie="true" api="ACHIEVEMENT">
+				<form_item type="popup_list" id="type" name="Type" width="900px" />
+				<form_item type="label"      id="about" name="" width="200px"  ajax_value_parrent="type" />
+				<form_item type="label"      id="image" name="" width="150px"  ajax_value_parrent="type" />
+				<form_item type="number"     id="score" name="Score" width="900px"   />
+			</group>
+		</form>
+
+       </forms>
+</interface>
