@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -102,7 +103,7 @@ public class SpaceshipForm extends Form {
 		SpaceshipDao spaceshipDao = new SpaceshipDao();
 
 		RecordDto record = mapDaoParameters(parameters);
-		record.put(APPLICATION_ID, String.valueOf(primaryId));
+		record.put(APPLICATION_ID, Objects.toString(primaryId, ""));
 		spaceshipDao.update(record, secondaryId);
 		
 		return primaryId;

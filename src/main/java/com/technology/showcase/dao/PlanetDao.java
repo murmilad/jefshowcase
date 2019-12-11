@@ -1,6 +1,7 @@
 package com.technology.showcase.dao;
 
 import java.util.LinkedList;
+import java.util.Objects;
 
 import com.technology.jef.server.dto.RecordDto;
 import com.technology.jef.server.exceptions.ServiceException;
@@ -23,7 +24,7 @@ public class PlanetDao extends H2Dao {
 			for (int j = 1; j<=5; j++) {
 				RecordDto record = new RecordDto();
 				record.put(NAME, PLANETS[(i-1)*5 + j]);
-				record.put(GALAXY_ID, String.valueOf(i));
+				record.put(GALAXY_ID, Objects.toString(i, ""));
 				super.create(record);
 			}
 		}

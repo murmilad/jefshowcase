@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.technology.jef.server.dto.OptionDto;
@@ -34,7 +35,7 @@ public class EngineTypeFactoryDao extends H2Dao {
 			for (int j = 1; j<=1 + (int) (Math.random() * 3); j++) {
 				RecordDto record = new RecordDto();
 				record.put(ENGINE_TYPE_ID, String.valueOf(uniqueList.get(j)));
-				record.put(FACTORY_ID, String.valueOf(i));
+				record.put(FACTORY_ID, Objects.toString(i, ""));
 				super.create(record);
 			}
 		}

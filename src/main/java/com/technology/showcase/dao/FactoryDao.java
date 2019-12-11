@@ -3,6 +3,7 @@ package com.technology.showcase.dao;
 import static com.technology.jef.server.serialize.SerializeConstant.PARAMETER_NAME_VALUE_SEPARATOR;
 
 import java.util.LinkedList;
+import java.util.Objects;
 
 import com.technology.jef.server.dto.RecordDto;
 import com.technology.jef.server.exceptions.ServiceException;
@@ -38,7 +39,7 @@ public class FactoryDao extends H2Dao {
 								+ "<li>Fabrication energy consumption: " + String.valueOf(1000+(int) (Math.random() * 10000)) + " / s</li>"
 								+ "<li>Energy consumption per metal: " + String.valueOf(Math.round(Math.random() * 10000.0)/ 100.0) + " </li>"
 				);
-				record.put(PLANET_ID, String.valueOf(i));
+				record.put(PLANET_ID, Objects.toString(i, ""));
 				super.create(record);
 			}
 		}

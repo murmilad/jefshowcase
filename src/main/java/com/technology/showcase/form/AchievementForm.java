@@ -4,6 +4,7 @@ package com.technology.showcase.form;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.technology.jef.server.exceptions.ServiceException;
@@ -67,7 +68,7 @@ public class AchievementForm extends Form {
 		AchievementPilotDao achievementPilot = new AchievementPilotDao();
 
 		RecordDto record = mapDaoParameters(parameters);
-		record.put(AchievementPilotDao.PILOT_ID, String.valueOf(primaryId));
+		record.put(AchievementPilotDao.PILOT_ID, Objects.toString(primaryId, ""));
 		achievementPilot.update(record, secondaryId);
 		
 		return primaryId;

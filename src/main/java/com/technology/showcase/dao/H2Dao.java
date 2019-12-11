@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.naming.Context;
@@ -87,7 +88,7 @@ public abstract class H2Dao {
 	            		"MERGE INTO " + getTable() + " (" +  getKey() + ", " + String.join(",", fields.keySet()) + ")" +
 	            		" KEY (" + getKey() + ")"; 
 
-				values.add(0, String.valueOf(applicationId));
+				values.add(0, Objects.toString(applicationId, ""));
 			} else {
 				sql =
 	            		"INSERT INTO " + getTable() + " (" +  String.join(",", fields.keySet()) + ")";
@@ -196,7 +197,7 @@ public abstract class H2Dao {
 		        }
 		        if (result.size() == 0) {
 //TODO when groups will created
-//		        	throw new ServiceException("Record not found for id: " + String.valueOf(id) + " table: " + getTable());
+//		        	throw new ServiceException("Record not found for id: " + Objects.toString(id, "") + " table: " + getTable());
 		        }
 			} catch (SQLException e) {
 				throw new ServiceException(e.getMessage(), e.getCause());
