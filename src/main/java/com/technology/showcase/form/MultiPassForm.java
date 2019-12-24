@@ -28,17 +28,19 @@ public class MultiPassForm extends Form {
 	public Map<String, Field> getFieldsMap() {
 
 		return new HashMap<String, Field>(){{
-			put("has_multipass", new Field(HAS_MULTIPASS) {
-				public List<OptionDto> getListHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
+			put("has_multipass", new Field(HAS_MULTIPASS) {{
+
+				getListListener((String parameterName, Map<String,String> parameters) -> {
 					return new LinkedList<OptionDto> () {{
 						add(new OptionDto("Yes", 1));
 						add(new OptionDto("No", 0));
 					}}; 
 					
-				};
-			});
-			put("multipass_id", new Field(MULTIPASS_ID) {
-				public List<String> checkHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
+				});
+			}});
+			put("multipass_id", new Field(MULTIPASS_ID) {{
+
+				checkListener((String parameterName, Map<String,String> parameters) -> {
 					List<String> errors = new LinkedList<String>();
 					
 					if ("1".equals(parameters.get("has_multipass")) && !parameters.get(parameterName).matches("^\\w{2}\\d{7}$")) {
@@ -46,15 +48,17 @@ public class MultiPassForm extends Form {
 					} 
 					
 					return errors;
-				};
-				public Boolean isVisibleHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
+				});
+
+				isVisibleListener((String parameterName, Map<String,String> parameters) -> {
 					return "1".equals(parameters.get("has_multipass"));
-				};
-				public Boolean isRequiredHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
+				});
+
+				isRequiredListener((String parameterName, Map<String,String> parameters) -> {
 					return "1".equals(parameters.get("has_multipass"));
 					
-				};
-			});
+				});
+			}});
 
 		}};
 	}

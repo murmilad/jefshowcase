@@ -32,24 +32,27 @@ public class AboutMeForm extends Form {
 		return new HashMap<String, Field>(){{
 			put("first_name", new Field(FIRST_NAME));
 			put("last_name", new Field(LAST_NAME));
-			put("gender", new Field(GENDER) {
-				public List<OptionDto> getListHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
+			put("gender", new Field(GENDER) {{
+
+				getListListener((String parameterName, Map<String,String> parameters) -> {
 					GenderDao genderDao = new GenderDao();
 					return genderDao.getOptions();
-				};
-			});
+				});
+			}});
 			put("name_changed_upon_marriage", new Field(NAME_CHANGED_UPON_MARRIAGE));
-			put("birth_name", new Field(BIRTH_NAME) {
-				public Boolean isVisibleHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
+			put("birth_name", new Field(BIRTH_NAME) {{
+
+				isVisibleListener((String parameterName, Map<String,String> parameters) -> {
 					 return "1".equals(parameters.get("name_changed_upon_marriage"));
-				};
-			});
-			put("social_status_id", new Field(SOCIAL_STATUS_ID) {
-				public List<OptionDto> getListHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
+				});
+			}});
+			put("social_status_id", new Field(SOCIAL_STATUS_ID) {{
+
+				getListListener((String parameterName, Map<String,String> parameters) -> {
 					SocialStatusDao socialStatusDao = new SocialStatusDao();
 					return socialStatusDao.getOptions();
-				};
-			});
+				});
+			}});
 			put("current_date", new Field());
 			put("photo", new Field(PHOTO));
 		}};

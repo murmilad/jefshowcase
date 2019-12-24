@@ -26,26 +26,29 @@ public class AchievementForm extends Form {
 	public Map<String, Field> getFieldsMap() {
 
 		return new HashMap<String, Field>(){{
-			put("type", new Field(AchievementPilotDao.ACHIEVEMENT_ID) {
-				public List<OptionDto> getListHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
+			put("type", new Field(AchievementPilotDao.ACHIEVEMENT_ID) {{
+
+				getListListener((String parameterName, Map<String,String> parameters) -> {
 					AchievementTypeDao achievementTypeDao = new AchievementTypeDao();
 					return  achievementTypeDao.getOptions();
-				};
-			});
-			put("about", new Field() {
-				public String getValueHandler (String parameterName, Map<String,String> parameters) throws ServiceException {
+				});
+			}});
+			put("about", new Field() {{
+
+				getValueListener((String parameterName, Map<String,String> parameters) -> {
 					AchievementTypeDao achievementTypeDao = new AchievementTypeDao();
 					RecordDto achievement = achievementTypeDao.load(Integer.parseInt(parameters.get("type")));
 					return  achievement.get(AchievementTypeDao.ABOUT);
-				};
-			});
-			put("image", new Field() {
-				public String getValueHandler (String parameterName, Map<String,String> parameters) throws ServiceException {
+				});
+			}});
+			put("image", new Field() {{
+
+				getValueListener((String parameterName, Map<String,String> parameters) -> {
 					AchievementTypeDao achievementTypeDao = new AchievementTypeDao();
 					RecordDto achievement = achievementTypeDao.load(Integer.parseInt(parameters.get("type")));
 					return  "<img src='" + achievement.get(AchievementTypeDao.IMAGE) + "' />";
-				};
-			});
+				});
+			}});
 			put("score", new Field(AchievementPilotDao.SCORE));
 
 		}};

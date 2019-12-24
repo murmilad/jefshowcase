@@ -17,6 +17,7 @@ import com.technology.jef.server.dto.OptionDto;
 import com.technology.jef.server.dto.RecordDto;
 import com.technology.jef.server.form.Field;
 import com.technology.jef.server.form.Form;
+import com.technology.jef.server.form.FormData.Attribute;
 import com.technology.showcase.dao.AddressDao;
 import com.technology.showcase.dao.GalaxyDao;
 import com.technology.showcase.dao.PlanetDao;
@@ -32,30 +33,34 @@ public class AddressForm extends Form {
 	public Map<String, Field> getFieldsMap() {
 
 		return new HashMap<String, Field>(){{
-			put("galaxy", new Field(GALAXY) {
-				public List<OptionDto> getListHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
+			put("galaxy", new Field(GALAXY) {{
+
+				getListListener((String parameterName, Map<String,String> parameters) -> {
 					GalaxyDao galaxyDao = new GalaxyDao();
 					return galaxyDao.getOptions();
-				};
-			});
-			put("planet", new Field(PLANET) {
-				public List<OptionDto> getListInteractiveHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
+				});
+			}});
+			put("planet", new Field(PLANET) {{
+
+				getListInteractiveListener((String parameterName, Map<String,String> parameters) -> {
 					PlanetDao planetDao = new PlanetDao();
 					return planetDao.getOptions(new RecordDto() {{
 						put(GALAXY_ID, parameters.get("galaxy"));
 					}});
-				};
-			});
-			put("region", new Field(REGION) {
-				public List<OptionDto> getListInteractiveHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
+				});
+			}});
+			put("region", new Field(REGION) {{
+
+				getListInteractiveListener((String parameterName, Map<String,String> parameters) -> {
 					RegionDao regionDao = new RegionDao();
 					return regionDao.getOptions(new RecordDto() {{
 						put(PLANET_ID, parameters.get("planet"));
 					}});
-				};
-			});
-			put("zip", new Field(REG_POST_INDEX) {
-				public String getValueHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
+				});
+			}});
+			put("zip", new Field(REG_POST_INDEX) {{
+
+				getValueListener((String parameterName, Map<String,String> parameters) -> {
 					String zip = "";
 					RegionDao regionDao = new RegionDao();
 					PlanetDao planetDao = new PlanetDao();
@@ -75,15 +80,24 @@ public class AddressForm extends Form {
 						throw new ServiceException(e.getMessage(), e.getCause());
 					}
 					return zip;
-				};
-				public List<String> checkHandler(String parameterName, Map<String,String> parameters) throws ServiceException {
+				});
+
+				checkListener((String parameterName, Map<String,String> parameters) -> {
 					List<String> errors = new LinkedList<String>();
 					if ("zip".equals(parameterName) && !parameters.get(parameterName).matches("^\\[B@[\\da-f]{8}$")) {
 						errors.add("Incorrect Universe ZIP");
 					}
 					return errors;
-				};
-			});
+				});
+				
+				getAttributesListener((String parameterName, Integer primaryId) -> {
+					Map<Attribute, Boolean> attributes = new HashMap<Attribute, Boolean>();
+					
+					attributes.put(Attribute.READONLY, true);
+
+					return attributes;
+				});
+			}});
 
 		}};
 	}
