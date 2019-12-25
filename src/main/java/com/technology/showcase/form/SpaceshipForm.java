@@ -128,7 +128,7 @@ public class SpaceshipForm extends Form {
 	
 	
 	@Override
-	public List<String> getGroups(Integer primaryId) throws ServiceException {
+	public List<String> getGroups(Integer primaryId, Map<String, String> parameters) throws ServiceException {
 		SpaceshipDao spaceshipDao = new SpaceshipDao();
 
 		RecordDto record = new RecordDto();

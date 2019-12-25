@@ -90,7 +90,7 @@ public class AchievementForm extends Form {
 	
 	
 	@Override
-	public List<String> getGroups(Integer primaryId) throws ServiceException {
+	public List<String> getGroups(Integer primaryId, Map<String, String> parameters) throws ServiceException {
 		AchievementPilotDao achievementPilot = new AchievementPilotDao();
 
 		RecordDto record = new RecordDto();
