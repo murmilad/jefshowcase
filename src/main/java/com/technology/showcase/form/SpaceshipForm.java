@@ -116,7 +116,7 @@ public class SpaceshipForm extends Form {
 	}
 
 	@Override
-	public void deleteForm(Integer primaryId, Integer secondaryId)
+	public void deleteForm(Integer primaryId, Integer secondaryId, Map<String, String> parameters)
 			throws ServiceException {
 
 		SpaceshipDao spaceshipDao = new SpaceshipDao();

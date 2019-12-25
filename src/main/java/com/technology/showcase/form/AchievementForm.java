@@ -78,7 +78,7 @@ public class AchievementForm extends Form {
 	}
 
 	@Override
-	public void deleteForm(Integer primaryId, Integer secondaryId)
+	public void deleteForm(Integer primaryId, Integer secondaryId, Map<String, String> parameters)
 			throws ServiceException {
 
 		AchievementPilotDao achievementPilot = new AchievementPilotDao();
