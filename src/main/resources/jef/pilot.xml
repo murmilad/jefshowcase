@@ -49,8 +49,8 @@
 			</group>
 
 			<group id="spaceships" name="Spaceship" is_multiplie="true" parrent_api="ABOUT_ME" api="SPACESHIP">
-				<form_item type="auto_complete_editable" id="spaceship_galaxy"          name="Production galaxy"	width="500px"	required="1"  />
-				<form_item type="auto_complete_editable" id="spaceship_planet"          name="Production planet"	width="500px"	required="1"  ajax_list_parrent="spaceship_galaxy" />
+				<form_item type="auto_complete_editable" id="spaceship_galaxy"          name="Production galaxy"	width="450px"	required="1"  />
+				<form_item type="auto_complete_editable" id="spaceship_planet"          name="Production planet"	width="450px"	required="1"  ajax_list_parrent="spaceship_galaxy" />
 
 				<form_item type="popup_list"             id="spaceship_factory"         name="Spaceship factory"	width="990px"	required="1"  ajax_list_parrent="spaceship_galaxy,spaceship_planet" />
 				
