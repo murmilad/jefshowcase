@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<interface service="rest/form/" id="showcase" name="Showcase" >
+<interface service="rest/form/" id="showcase" style="blue_scheme.css" name="Showcase" >
 	<script >
 		var nextForm;
 	</script>

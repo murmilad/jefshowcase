@@ -1,0 +1,105 @@
+/*main*/
+
+.first_font {
+	font: 13px/18px Arial, Tahoma, sans-serif;
+}
+.second_font { 
+	font: bold 16px/28px Arial, Tahoma, sans-serif;
+}
+
+.first_color {
+	background: #100280;
+}
+.second_color {
+	background: #BBB;
+}
+
+.first_text_color{
+	color: #000;
+}
+.second_text_color {
+	color: #FFF;
+}
+
+
+
+.background_color {
+	background: #FFF;
+}
+
+.url_color { 
+	color: #2873b6;
+}
+
+
+.frames_border {
+	border: solid 1px #BBB;
+}
+
+/*screen*/
+
+.screen_width: {
+	width: 1000px;
+}
+
+
+/*work_area*/
+.work_area_header_height {
+	height: 32px;
+}
+
+.work_area_header_line_height {
+	line-height: 34px;
+}
+.work_area_header_font_size {
+	font-size: 15px;
+}
+.work_area_width {
+	width: 1070px;
+}
+
+
+/*error*/
+
+.error_color {
+	border-color: #E50029 !important;
+}
+
+/*widgets*/
+
+.widgets_background_color {
+	background-color: #E7F0F5;
+}
+
+.select_height {
+	height: 30px;
+}
+
+.downarrow_color {
+	background-color: rgba(231, 240, 245, 1);
+}
+.downarrow_size {
+	size: 10px;
+}
+
+/*messages*/
+
+.messages_color {
+	background: #f3f3f3;
+}
+.messages_border {
+	border: 2px solid #BBB;
+}
+.error_border {
+	 border: 2px solid #E50029;
+}
+
+
+/*buttons*/
+.buttons_height {
+	height: 32px;
+}
+
+.buttons_width {
+	width: 98px;
+}
