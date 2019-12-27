@@ -3,9 +3,6 @@
 .first_font {
 	font: 13px/18px Arial, Tahoma, sans-serif;
 }
-.second_font { 
-	font: bold 16px/28px Arial, Tahoma, sans-serif;
-}
 
 .first_color {
 	background: #100280;
@@ -21,6 +18,12 @@
 	color: #FFF;
 }
 
+.first_frames_border {
+	border: solid 1px #BBB;
+}
+.second_frames_border {
+	border: solid 1px #E6E6E6;
+}
 
 
 .background_color {
@@ -32,30 +35,24 @@
 }
 
 
-.frames_border {
-	border: solid 1px #BBB;
-}
-
-/*screen*/
-
-.screen_width: {
-	width: 1000px;
-}
-
-
 /*work_area*/
-.work_area_header_height {
+
+.header_color {
+	background: #100280;
+}
+
+.header_height {
 	height: 32px;
 }
 
-.work_area_header_line_height {
+.header_line_height {
 	line-height: 34px;
 }
-.work_area_header_font_size {
+.header_font_size {
 	font-size: 15px;
 }
 .work_area_width {
-	width: 1070px;
+	width: 1080px;
 }
 
 
@@ -67,12 +64,16 @@
 
 /*widgets*/
 
-.widgets_background_color {
-	background-color: #E7F0F5;
+.widgets_color {
+	background-color: #FFF;
 }
 
-.select_height {
-	height: 30px;
+.widgets_height {
+	height: 20px;
+}
+
+.widgets_font { 
+	font: bold 13px/18px Arial, Tahoma, sans-serif;
 }
 
 .downarrow_color {
@@ -96,6 +97,10 @@
 
 
 /*buttons*/
+.buttons_color {
+	background: #BBB;
+}
+
 .buttons_height {
 	height: 32px;
 }
