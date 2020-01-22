@@ -8,13 +8,14 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.technology.jef.server.exceptions.ServiceException;
-import com.technology.jef.server.dto.OptionDto;
 import com.technology.jef.server.dto.RecordDto;
 import com.technology.jef.server.form.Field;
 import com.technology.jef.server.form.Form;
+import com.technology.jef.server.form.Service;
 import com.technology.showcase.dao.AchievementPilotDao;
 import com.technology.showcase.dao.AchievementTypeDao;
-import com.technology.showcase.dao.SpaceshipDao;
+import com.technology.showcase.dao.ReasonAchievementPilotDao;
+import com.technology.showcase.dao.ReasonDao;
 
 /**
 * Interface "Address" controller
@@ -49,6 +50,14 @@ public class AchievementForm extends Form {
 					return  "<img src='" + achievement.get(AchievementTypeDao.IMAGE) + "' />";
 				});
 			}});
+			put("reason", new Field() {{
+
+				getListListener((String parameterName, Map<String,String> parameters) -> {
+					ReasonDao reasonDao = new ReasonDao(); 
+					return reasonDao.getOptions();
+				});
+			}});
+			
 			put("score", new Field(AchievementPilotDao.SCORE));
 
 		}};
@@ -61,6 +70,10 @@ public class AchievementForm extends Form {
 		AchievementPilotDao achievementPilotDao = new AchievementPilotDao();
 
 		setFormData(achievementPilotDao.load(secondaryId));
+		
+		ReasonAchievementPilotDao reasonAchievementPilotDao = new ReasonAchievementPilotDao();
+		
+		getFormData().putValue("reason", Service.getListData(() -> reasonAchievementPilotDao.loadList(secondaryId)));
 	}
 
 
@@ -72,8 +85,16 @@ public class AchievementForm extends Form {
 
 		RecordDto record = mapDaoParameters(parameters);
 		record.put(AchievementPilotDao.PILOT_ID, Objects.toString(primaryId, ""));
-		achievementPilot.update(record, secondaryId);
+		final Integer newSecondaryId = achievementPilot.update(record, secondaryId);
+
+		ReasonAchievementPilotDao reasonAchievementPilotDao = new ReasonAchievementPilotDao();
 		
+		Service.setListData(parameters.get("reason")
+				, (String id) -> reasonAchievementPilotDao.create(id, secondaryId != null ? String.valueOf(secondaryId) : String.valueOf(newSecondaryId))
+				, () -> reasonAchievementPilotDao.deleteList(secondaryId)
+				);
+		
+				
 		return primaryId;
 	}
 
@@ -82,8 +103,10 @@ public class AchievementForm extends Form {
 			throws ServiceException {
 
 		AchievementPilotDao achievementPilot = new AchievementPilotDao();
+		ReasonAchievementPilotDao reasonAchievementPilotDao = new ReasonAchievementPilotDao();
 
 		achievementPilot.delete(secondaryId);
+		reasonAchievementPilotDao.deleteList(secondaryId);
 		
 	}
 

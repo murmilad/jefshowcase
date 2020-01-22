@@ -18,6 +18,7 @@
 				<form_item type="popup_list" id="type" name="Type" width="900px" />
 				<form_item type="label"      id="about" name="" width="200px"  ajax_value_parrent="type" />
 				<form_item type="label"      id="image" name="" width="150px"  ajax_value_parrent="type" />
+				<form_item type="short_checkbox_list"  id="reason" name="Reason" width="900px"  />
 				<form_item type="number"     id="score" name="Score" width="900px"   />
 			</group>
 		</form>

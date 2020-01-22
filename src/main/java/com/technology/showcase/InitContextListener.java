@@ -16,6 +16,8 @@ import com.technology.showcase.dao.GenderDao;
 import com.technology.showcase.dao.H2Dao;
 import com.technology.showcase.dao.MultiPassDao;
 import com.technology.showcase.dao.PlanetDao;
+import com.technology.showcase.dao.ReasonAchievementPilotDao;
+import com.technology.showcase.dao.ReasonDao;
 import com.technology.showcase.dao.RegionDao;
 import com.technology.showcase.dao.SocialStatusDao;
 import com.technology.showcase.dao.SpaceshipDao;
@@ -40,6 +42,8 @@ public class InitContextListener implements ServletContextListener {
 			new SpaceshipDao().init();
 			new AchievementPilotDao().init();
 			new AchievementTypeDao().init();
+			new ReasonDao().init();
+			new ReasonAchievementPilotDao().init();
         } catch (ServiceException e) {
 			e.printStackTrace();
         }
