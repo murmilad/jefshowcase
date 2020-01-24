@@ -88,6 +88,11 @@ public class SpaceshipForm extends Form {
 				});
 			}});
 			put("document", new Field(DOCUMENT));
+			put("button_add", new Field(){{
+				isVisibleListener((String parameterName, Map<String,String> parameters) -> {
+					return Integer.valueOf(parameters.get("group_count")) < 3;
+				});
+			}});
 
 		}};
 	}
