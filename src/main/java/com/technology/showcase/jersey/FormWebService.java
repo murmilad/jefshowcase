@@ -2,25 +2,16 @@ package com.technology.showcase.jersey;
 
 
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.codec.binary.Base64OutputStream;
-import org.apache.commons.io.IOUtils;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.stream.ImageInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -39,56 +30,53 @@ import com.technology.jef.server.dto.ValueDto;
 import static com.technology.jef.server.WebServiceConstant.*;
 import static com.technology.jef.server.serialize.SerializeConstant.*;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 @Path("/form")
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class FormWebService{
-	
+
 	@Context
 	HttpServletRequest request;
 	
 	@Context
 	HttpServletResponse response;
 	
-	private Service<JefShowcaseFormFactory> service = new Service<JefShowcaseFormFactory>(new JefShowcaseFormFactory());
-
 	/**
-	 * Получение параметров формы интерфейса консультанта
+	* Your own service inherited by Framework Service class (see ex. https://github.com/murmilad/jefshowcase)
+	*/
+	private Service<JefShowcaseFormFactory> service = new Service<JefShowcaseFormFactory>(new JefShowcaseFormFactory());
+	
+	/**
+	 * Getting formitems data on loading 
 	 * 
-	 * @param applicationId идентификатор анкеты
-	 * @param cityId идентификатор города интерфейса консультанта
-	 * @param formApi идентификатор контроллера интерфейса консультанта
+	 * @param formApi API, that you setted up in your form XML (interface/forms/form/form_item/api)
+	 * @param parameters Separated parameters
 	 * 
-	 * @return список групп и параметров формы
+	 * @return Goups of parameters of your forms
 	 * @throws ServiceException
 	 */
-
+	
 	@POST
 	@Path("/get")
 	public FormDto getInterfaceData(
 			@FormParam(FORM_API) String formApi,
 			@FormParam(PARAMETERS) String parameters
 			) throws ServiceException {
-
-
+	
+	
+	
 		Map<String,String> parametersMap = listToMap(parameters);
-
+	
 		Integer id = parametersMap.get("uri_id") != null ? Integer.valueOf(parametersMap.get("uri_id")) : null; 
-
+	
 		FormDto interfaceData = null;
 		try {
 			interfaceData =  service.getFormDto(id, formApi, parametersMap);
@@ -99,24 +87,23 @@ public class FormWebService{
 				throw new ServiceException(e.getMessage(),e);
 			}
 		}
-
+	
 		
 		return interfaceData;
 		
 	}
-
+	
 	/**
-	 * Получение списка элементов параметра формы
+	 * Getting list of items for 'list' fields 
 	 * 
-	 * @param applicationId идентификатор анкеты
-	 * @param cityId идентификатор города интерфейса консультанта
-	 * @param formApi идентификатор контроллера интерфейса консультанта
-	 * @param parameterName наименование параметра формы
+	 * @param formApi API, that you setted up in your form XML (interface/forms/form/form_item/api)
+	 * @param parameterName Name of the current parameter
+	 * @param parameters Separated parameters
 	 * 
-	 * @return список элементов текущего параметра
+	 * @return list of items for field
 	 * @throws ServiceException
 	 */
-
+	
 	@POST
 	@Path("/get_list")
 	public ListDto<ListItemDto> getListData(
@@ -124,13 +111,13 @@ public class FormWebService{
 			@FormParam(PARAMETER_NAME) String parameterName,
 			@FormParam(PARAMETERS) String parameters
 			) throws ServiceException {
-
+	
 		HttpSession session = request.getSession();
-
+	
 		Map<String,String> parametersMap = listToMap(parameters);
-
+	
 		Integer id = parametersMap.get("uri_id") != null ? Integer.valueOf(parametersMap.get("uri_id")) : null; 
-
+	
 		ListDto<ListItemDto> listData = null;
 		try {
 			return new ListDto<ListItemDto>(SERVICE_STATUS_OK, service.getListData(id, formApi, parameterName, parametersMap));
@@ -142,40 +129,38 @@ public class FormWebService{
 				throw new ServiceException(e.getMessage(),e);
 			}
 		}
-
+	
 		
 		return listData;
 		
 	}
-
+	
 	/**
-	 * Сохранение параметров формы
+	 * Save form
 	 * 
-	 * @param applicationId идентификатор анкеты
-	 * @param cityId идентификатор города интерфейса консультанта
-	 * @param parameters параметры, которые необходимо обработать
+	 * @param parameters Separated parameters
 	 * 
-	 * @return результат выполнения операции
+	 * @return Result with status and errors if exists 
 	 * @throws ServiceException
 	 */
-
+	
 	@POST
 	@Path("/set")
 	public ResultDto setFormData(
 			@FormParam(PARAMETERS)String parameters
 			) throws ServiceException {
-
+	
 		CurrentLocale.getInstance().setLocale(new Locale("en_US"));
-
+	
 		HttpSession session = request.getSession();
-
+	
 		Map<String,String> parametersMap = listToMap(parameters);
-
+	
 		Integer id = parametersMap.get("uri_id") != null ? Integer.valueOf(parametersMap.get("uri_id")) : null; 
-
+	
 		ResultDto result = null;
 		try {
-
+	
 			result = service.setFormData(id, parametersMap);
 		} catch ( ServiceException e) {
 			if (e.getCause() instanceof IllegalArgumentException) {
@@ -184,26 +169,24 @@ public class FormWebService{
 				throw new ServiceException(e.getMessage(),e);
 			}
 		}
-
+	
 		
 		return result;
 		
 	}	
-
-
+	
+	
 	/**
-	 * Интерактивное получение списка элементов для параметра формы
+	 * Get list of items for 'list' field that depends on some other fields
 	 * 
-	 * @param applicationId идентификатор анкеты
-	 * @param cityId идентификатор города интерфейса консультанта
-	 * @param formApi идентификатор контроллера интерфейса консультанта
-	 * @param parameterName наименование параметра формы
-	 * @param parameters параметры, влияющие на список элементов
+	 * @param formApi API, that you setted up in your form XML (interface/forms/form/form_item/api)
+	 * @param parameterName Name of the current parameter
+	 * @param parameters Separated parameters
 	 * 
-	 * @return список элементов текущего параметра
+	 * @return list of items for field
 	 * @throws ServiceException
 	 */
-
+	
 	@POST
 	@Path("/get_list_interactive")
 	public ListDto<ListItemDto> getListInteractiveData(
@@ -211,14 +194,14 @@ public class FormWebService{
 			@FormParam(PARAMETER_NAME) String parameterName,
 			@FormParam(PARAMETERS)String parameters
 			) throws ServiceException {
-
+	
 		HttpSession session = request.getSession();
-
+	
 		Map<String,String> parametersMap = listToMap(parameters);
-
+	
 		Integer id = parametersMap.get("uri_id") != null ? Integer.valueOf(parametersMap.get("uri_id")) : null; 
-
-
+	
+	
 		ListDto<ListItemDto> listData = null;
 		try {
 			return new ListDto<ListItemDto>(SERVICE_STATUS_OK, service.getInteractiveListData(id, formApi, parameterName, listToMap(parameters)));
@@ -230,26 +213,24 @@ public class FormWebService{
 				throw new ServiceException(e.getMessage(),e);
 			}
 		}
-
+	
 		
 		return listData;
 		
 	}	
-
+	
 	
 	/**
-	 * Интерактивное получение значения параметра формы
+	 * Get value for field that depends on some other fields
 	 * 
-	 * @param applicationId идентификатор анкеты
-	 * @param cityId идентификатор города интерфейса консультанта
-	 * @param formApi идентификатор контроллера интерфейса консультанта
-	 * @param parameterName наименование параметра формы
-	 * @param parameters параметры, влияющие на список элементов
+	 * @param formApi API, that you setted up in your form XML (interface/forms/form/form_item/api)
+	 * @param parameterName Name of the current parameter
+	 * @param parameters Separated parameters
 	 * 
-	 * @return знечение параметра формы
+	 * @return value of field
 	 * @throws ServiceException
 	 */
-
+	
 	@POST
 	@Path("/get_value_interactive")
 	public ValueDto<String> getValue(
@@ -257,7 +238,7 @@ public class FormWebService{
 			@FormParam(PARAMETER_NAME) String parameterName,
 			@FormParam(PARAMETERS) String parameters
 			) throws ServiceException {
-
+	
 		try {
 		    parameters = java.net.URLDecoder.decode(parameters, StandardCharsets.UTF_8.name());
 		} catch (UnsupportedEncodingException e) {
@@ -265,11 +246,11 @@ public class FormWebService{
 		}
 		
 		HttpSession session = request.getSession();
-
+	
 		Map<String,String> parametersMap = listToMap(parameters);
-
+	
 		Integer id = parametersMap.get("uri_id") != null ? Integer.valueOf(parametersMap.get("uri_id")) : null; 
-
+	
 		ValueDto<String> valueData = null;
 		try {
 			return new ValueDto<String>(SERVICE_STATUS_OK, service.getValueData(id, formApi, parameterName, listToMap(parameters)));
@@ -281,26 +262,24 @@ public class FormWebService{
 				throw new ServiceException(e.getMessage(),e);
 			}
 		}
-
+	
 		
 		return valueData;
 		
 	}	
-
-
+	
+	
 	/**
-	 * Интерактивное получение признака видимости параметра формы
+	 * Get sign of visiblity for field that depends on some other fields
 	 * 
-	 * @param applicationId идентификатор анкеты
-	 * @param cityId идентификатор города интерфейса консультанта
-	 * @param formApi идентификатор контроллера интерфейса консультанта
-	 * @param parameterName наименование параметра формы
-	 * @param parameters параметры, влияющие на список элементов
+	 * @param formApi API, that you setted up in your form XML (interface/forms/form/form_item/api)
+	 * @param parameterName Name of the current parameter
+	 * @param parameters Separated parameters
 	 * 
-	 * @return Признак видимости параметра формы true видим false не видим
+	 * @return boolean value
 	 * @throws ServiceException
 	 */
-
+	
 	@POST
 	@Path("/get_is_visible_interactive")
 	public ValueDto<Boolean> getIsVisible(
@@ -308,13 +287,13 @@ public class FormWebService{
 			@FormParam(PARAMETER_NAME) String parameterName,
 			@FormParam(PARAMETERS) String parameters
 			) throws ServiceException {
-
+	
 		HttpSession session = request.getSession();
-
+	
 		Map<String,String> parametersMap = listToMap(parameters);
-
+	
 		Integer id = parametersMap.get("uri_id") != null ? Integer.valueOf(parametersMap.get("uri_id")) : null; 
-
+	
 		ValueDto<Boolean> valueData = null;
 		try {
 			return new ValueDto<Boolean>(SERVICE_STATUS_OK, service.getIsVisible(id, formApi, parameterName, listToMap(parameters)));
@@ -326,25 +305,23 @@ public class FormWebService{
 				throw new ServiceException(e.getMessage(),e);
 			}
 		}
-
+	
 		
 		return valueData;
 		
 	}
-
+	
 	/**
-	 * Интерактивное получение признака активности параметра формы
+	 * Get if fiels active sign that depends on some other fields
 	 * 
-	 * @param applicationId идентификатор анкеты
-	 * @param cityId идентификатор города интерфейса консультанта
-	 * @param formApi идентификатор контроллера интерфейса консультанта
-	 * @param parameterName наименование параметра формы
-	 * @param parameters параметры, влияющие на список элементов
+	 * @param formApi API, that you setted up in your form XML (interface/forms/form/form_item/api)
+	 * @param parameterName Name of the current parameter
+	 * @param parameters Separated parameters
 	 * 
-	 * @return Признак активности параметра формы true активен false не активен
+	 * @return boolean value
 	 * @throws ServiceException
 	 */
-
+	
 	@POST
 	@Path("/get_is_active_interactive")
 	public ValueDto<Boolean> getIsActive(
@@ -352,13 +329,13 @@ public class FormWebService{
 			@FormParam(PARAMETER_NAME) String parameterName,
 			@FormParam(PARAMETERS) String parameters
 			) throws ServiceException {
-
+	
 		HttpSession session = request.getSession();
-
+	
 		Map<String,String> parametersMap = listToMap(parameters);
-
+	
 		Integer id = parametersMap.get("uri_id") != null ? Integer.valueOf(parametersMap.get("uri_id")) : null; 
-
+	
 		ValueDto<Boolean> valueData = null;
 		try {
 			return new ValueDto<Boolean>(SERVICE_STATUS_OK, service.getIsActive(id, formApi, parameterName, listToMap(parameters)));
@@ -370,13 +347,13 @@ public class FormWebService{
 				throw new ServiceException(e.getMessage(),e);
 			}
 		}
-
+	
 		
 		return valueData;
 		
 	}
-
-
+	
+	
 	private Map<String,String> listToMap(String list) {
 		Map<String,String> parametersMap = new HashMap<String,String>();
 		
@@ -390,27 +367,28 @@ public class FormWebService{
 		return parametersMap;
 		
 	}
-
+	
 	
 	
 	/**
-	 * Преобразование потока с картинкой в base64URI. Необходимо для реализации сервиса поддержки виджета Image в IE<10
+	 * BASE 64 entry point for images in the IE<10 
 	 * 
-	 * @param inputStream Поток картинки
-	 * @return Строка base64URI
+	 * @param inputStream Image stream
+	 *
+	 * @return String of base64URI
 	 * @throws ServiceException
 	 */
 	
 	@POST
-    @Path("/image_to_base64")
-    public Response imageToBase64(
-            @FormDataParam("file") InputStream fileInputStream
-    ) throws ServiceException {
- 
+	@Path("/image_to_base64")
+	public Response imageToBase64(
+	        @FormDataParam("file") InputStream fileInputStream
+	) throws ServiceException {
+	
 
-   	    return Response.ok(service.imageToBase64(fileInputStream), "text/html")
-   	    		.build();
-        
+	    return Response.ok(service.imageToBase64(fileInputStream), "text/html")
+	    		.build();
+    
 
-    }	
+	}	
 }
