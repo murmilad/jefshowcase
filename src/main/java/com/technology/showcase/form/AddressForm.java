@@ -84,7 +84,7 @@ public class AddressForm extends Form {
 
 				checkListener((String parameterName, Map<String,String> parameters) -> {
 					List<String> errors = new LinkedList<String>();
-					if ("zip".equals(parameterName) && !parameters.get(parameterName).matches("^\\[B@[\\da-f]{8}$")) {
+					if ("zip".equals(parameterName) && !parameters.get(parameterName).matches("^\\[B@[\\da-f]{5,8}$")) {
 						errors.add("Incorrect Universe ZIP");
 					}
 					return errors;
