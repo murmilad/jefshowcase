@@ -13,6 +13,9 @@
 				loadForm(nextForm);
 				nextForm = '';
 			</script>
+			<script type="error">
+				nextForm = '';
+			</script>
 
 			<group id="achievements" name="Achievement" is_multiplie="true" api="ACHIEVEMENT">
 				<form_item type="popup_list" id="type" name="Type" width="900px" />

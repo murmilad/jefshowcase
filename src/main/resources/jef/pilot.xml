@@ -13,6 +13,9 @@
 				loadForm(nextForm);
 				nextForm = '';
 			</script>
+			<script type="error">
+				nextForm = '';
+			</script>
 
 			<form_item type="info" width="1035px"  id="current_date" name="Currtent date" api="ABOUT_ME"/>
 
