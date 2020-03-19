@@ -16,7 +16,7 @@ import com.technology.showcase.dao.AchievementPilotDao;
 import com.technology.showcase.dao.AchievementTypeDao;
 import com.technology.showcase.dao.ReasonAchievementPilotDao;
 import com.technology.showcase.dao.ReasonDao;
-
+import com.technology.jef.server.form.parameters.Parameters;
 /**
 * Interface "Address" controller
 */
@@ -29,30 +29,30 @@ public class AchievementForm extends Form {
 		return new HashMap<String, Field>(){{
 			put("type", new Field(AchievementPilotDao.ACHIEVEMENT_ID) {{
 
-				getListListener((String parameterName, Map<String,String> parameters) -> {
+				getListListener((String parameterName, Parameters parameters) -> {
 					AchievementTypeDao achievementTypeDao = new AchievementTypeDao();
 					return  achievementTypeDao.getOptions();
 				});
 			}});
 			put("about", new Field() {{
 
-				getValueListener((String parameterName, Map<String,String> parameters) -> {
+				getValueListener((String parameterName, Parameters parameters) -> {
 					AchievementTypeDao achievementTypeDao = new AchievementTypeDao();
-					RecordDto achievement = achievementTypeDao.load(Integer.parseInt(parameters.get("type")));
+					RecordDto achievement = achievementTypeDao.load(Integer.parseInt(parameters.getValue("type")));
 					return  achievement.get(AchievementTypeDao.ABOUT);
 				});
 			}});
 			put("image", new Field() {{
 
-				getValueListener((String parameterName, Map<String,String> parameters) -> {
+				getValueListener((String parameterName, Parameters parameters) -> {
 					AchievementTypeDao achievementTypeDao = new AchievementTypeDao();
-					RecordDto achievement = achievementTypeDao.load(Integer.parseInt(parameters.get("type")));
+					RecordDto achievement = achievementTypeDao.load(Integer.parseInt(parameters.getValue("type")));
 					return  "<img src='" + achievement.get(AchievementTypeDao.IMAGE) + "' />";
 				});
 			}});
 			put("reason", new Field() {{
 
-				getListListener((String parameterName, Map<String,String> parameters) -> {
+				getListListener((String parameterName, Parameters parameters) -> {
 					ReasonDao reasonDao = new ReasonDao(); 
 					return reasonDao.getOptions();
 				});
@@ -65,7 +65,7 @@ public class AchievementForm extends Form {
 
 
 	@Override
-	public void load(Integer primaryId, Integer secondaryId, Map<String, String> parameters) throws ServiceException {
+	public void load(Integer primaryId, Integer secondaryId, Parameters parameters) throws ServiceException {
 
 		AchievementPilotDao achievementPilotDao = new AchievementPilotDao();
 
@@ -78,7 +78,7 @@ public class AchievementForm extends Form {
 
 
 	@Override
-	public Integer saveForm(Integer primaryId, Integer secondaryId, Map<String, String> parameters)
+	public Integer saveForm(Integer primaryId, Integer secondaryId, Parameters parameters)
 			throws ServiceException {
 
 		AchievementPilotDao achievementPilot = new AchievementPilotDao();
@@ -89,7 +89,7 @@ public class AchievementForm extends Form {
 
 		ReasonAchievementPilotDao reasonAchievementPilotDao = new ReasonAchievementPilotDao();
 		
-		Service.setListData(parameters.get("reason")
+		Service.setListData(parameters.getValue("reason")
 				, (String id) -> reasonAchievementPilotDao.create(id, secondaryId != null ? String.valueOf(secondaryId) : String.valueOf(newSecondaryId))
 				, () -> reasonAchievementPilotDao.deleteList(secondaryId)
 				);
@@ -99,7 +99,7 @@ public class AchievementForm extends Form {
 	}
 
 	@Override
-	public void deleteForm(Integer primaryId, Integer secondaryId, Map<String, String> parameters)
+	public void deleteForm(Integer primaryId, Integer secondaryId, Parameters parameters)
 			throws ServiceException {
 
 		AchievementPilotDao achievementPilot = new AchievementPilotDao();
@@ -113,7 +113,7 @@ public class AchievementForm extends Form {
 	
 	
 	@Override
-	public List<String> getGroups(Integer primaryId, Map<String, String> parameters) throws ServiceException {
+	public List<String> getGroups(Integer primaryId, Parameters parameters) throws ServiceException {
 		AchievementPilotDao achievementPilot = new AchievementPilotDao();
 
 		RecordDto record = new RecordDto();
