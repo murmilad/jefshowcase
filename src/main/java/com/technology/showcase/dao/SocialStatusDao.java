@@ -25,6 +25,9 @@ public class SocialStatusDao extends H2Dao {
 		super.create(new RecordDto() {{
 			put(NAME, "Grand Master");
 		}});
+		super.create(new RecordDto() {{
+			put(NAME, "Grand Jedi Master. The Ultra Lord of Big Death Star");
+		}});
 	}
 	
 

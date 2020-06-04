@@ -4,6 +4,8 @@ package com.technology.showcase.form;
 import static com.technology.showcase.dao.AboutMeDao.*;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import com.technology.jef.server.exceptions.ServiceException;
 import com.technology.jef.server.form.Field;
@@ -12,6 +14,9 @@ import com.technology.showcase.dao.AboutMeDao;
 import com.technology.showcase.dao.GenderDao;
 import com.technology.showcase.dao.SocialStatusDao;
 import com.technology.jef.server.form.parameters.Parameters;
+
+import static com.technology.jef.server.serialize.SerializeConstant.*;
+
 /**
 * Interface "Phone" controller
 */
@@ -42,6 +47,16 @@ public class AboutMeForm extends Form {
 				getListListener((String parameterName, Parameters parameters) -> {
 					SocialStatusDao socialStatusDao = new SocialStatusDao();
 					return socialStatusDao.getOptions();
+				});
+				
+				checkListener((String parameterName, Parameters parameters) -> {
+					List<String> errors = new LinkedList<String>();
+					
+					if (parameters.getValue(parameterName).contains(LIST_SEPARATOR) && parameters.getValue(parameterName).split(LIST_SEPARATOR).length == 1) {
+						errors.add("Other value is required");
+					} 
+					
+					return errors;
 				});
 			}});
 			put("current_date", new Field());

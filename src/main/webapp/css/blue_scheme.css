@@ -10,6 +10,9 @@
 .second_color {
 	background: #BBB;
 }
+.warning_color {
+    background-color: #FBEEC0 !important
+}
 
 .first_text_color{
 	color: #000;
