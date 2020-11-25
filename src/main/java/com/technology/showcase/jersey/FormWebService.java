@@ -391,4 +391,36 @@ public class FormWebService{
     
 
 	}	
+
+	/**
+	 *  base64URI to image conversion. for Image 
+	 * 
+	 * @param inputStream Поток картинки
+	 * @return binary data
+	 * @throws ServiceException
+	 */
+	
+	@POST
+    @Path("/base64_to_image")
+    public Response base64ToImage(
+    		@FormParam("base64") String base64
+    ) throws ServiceException {
+ 
+		String mimeType = "jpeg";
+		Pattern imageBase64Pattern = Pattern.compile("data:([a-zA-Z]*)/([a-zA-Z]*);base64,([^\\\"]*)", Pattern.CASE_INSENSITIVE);
+		Matcher imageBase64Matcher = imageBase64Pattern.matcher(base64);
+
+		if (imageBase64Matcher.matches()) {
+			mimeType = imageBase64Matcher.group(2);				
+
+			return Response.ok(service.base64ToImage(imageBase64Matcher.group(3)), MediaType.APPLICATION_OCTET_STREAM)
+					.header("content-disposition","attachment; filename = doc."+mimeType)
+	   	    		.build();
+		}
+
+   	    return Response.serverError()
+   	    		.build();
+
+
+    }	
 }
