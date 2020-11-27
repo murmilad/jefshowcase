@@ -10,6 +10,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -380,17 +381,18 @@ public class FormWebService{
 	 */
 	
 	@POST
-	@Path("/image_to_base64")
-	public Response imageToBase64(
-	        @FormDataParam("file") InputStream fileInputStream
-	) throws ServiceException {
-	
+    @Path("/image_to_base64")
+    public Response imageToBase64(
+            @FormDataParam("file") final FormDataBodyPart body
+    ) throws ServiceException {
+ 
+		String mimeType = body.getMediaType().toString();
+   	    return Response.ok(service.imageToBase64(body.getEntityAs(InputStream.class), mimeType), "text/html")
+   	    		.build();
+        
 
-	    return Response.ok(service.imageToBase64(fileInputStream), "text/html")
-	    		.build();
-    
+    }	
 
-	}	
 
 	/**
 	 *  base64URI to image conversion. for Image 
