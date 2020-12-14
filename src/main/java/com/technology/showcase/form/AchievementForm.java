@@ -1,6 +1,8 @@
 
 package com.technology.showcase.form;
 
+import static com.technology.jef.server.serialize.SerializeConstant.PARAMETER_NAME_VALUE_SEPARATOR;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,10 +71,18 @@ public class AchievementForm extends Form {
 
 		AchievementPilotDao achievementPilotDao = new AchievementPilotDao();
 
-		setFormData(achievementPilotDao.load(secondaryId));
+		RecordDto achievementPilot = achievementPilotDao.load(secondaryId);
+		setFormData(achievementPilot);
 		
 		ReasonAchievementPilotDao reasonAchievementPilotDao = new ReasonAchievementPilotDao();
-		
+
+		if (achievementPilot.get(AchievementPilotDao.ACHIEVEMENT_ID) != null && !"".equals(achievementPilot.get(AchievementPilotDao.ACHIEVEMENT_ID))) {
+			AchievementTypeDao achievementTypeDao = new AchievementTypeDao();
+			RecordDto achievement = achievementTypeDao.load(Integer.parseInt(((String)achievementPilot.get(AchievementPilotDao.ACHIEVEMENT_ID)).split(PARAMETER_NAME_VALUE_SEPARATOR)[0]));
+	
+			getFormData().putValue("about", (String) achievement.get(AchievementTypeDao.ABOUT));
+			getFormData().putValue("image",  "<img src='" +  achievement.get(AchievementTypeDao.IMAGE) + "' />");
+		}
 		getFormData().putValue("reason", Service.getListData(() -> reasonAchievementPilotDao.loadList(secondaryId)));
 	}
 
