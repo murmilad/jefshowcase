@@ -89,7 +89,7 @@ public class AddressForm extends Form {
 					return errors;
 				});
 				
-				getAttributesListener((String parameterName, Parameters parameters, Integer primaryId) -> {
+				getAttributesListener((String parameterName, Parameters parameters, String primaryId) -> {
 					Map<Attribute, Boolean> attributes = new HashMap<Attribute, Boolean>();
 					
 					attributes.put(Attribute.READONLY, true);
@@ -102,18 +102,20 @@ public class AddressForm extends Form {
 	}
 
 	@Override
-	public void load(Integer id, Integer secondaryId,  Parameters parameters) throws ServiceException {
+	public void load(String id, String secondaryId, Parameters parameters) throws ServiceException {
 		AddressDao addressDao = new AddressDao();
 
-		setFormData(addressDao.load(id));
+		if (id != null) {
+			setFormData(addressDao.load(Integer.parseInt(id)));
+		}
 	}
 
 	@Override
-	public Integer saveForm(Integer primaryId, Integer secondaryId, Parameters parameters)
+	public String saveForm(String primaryId, String secondaryId, Parameters parameters)
 			throws ServiceException {
 		AddressDao addressDao = new AddressDao();
 
-		return addressDao.update(mapDaoParameters(parameters), primaryId);
+		return addressDao.update(mapDaoParameters(parameters), primaryId == null ? null : Integer.parseInt(primaryId)).toString();
 	}	
 
 }

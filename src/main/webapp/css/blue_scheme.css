@@ -70,8 +70,20 @@
 
 /*widgets*/
 
+.widgets_header_float {
+	display: table-cell;
+}
+.widgets_body_float {
+	display: table-cell;
+}
+
+
 .widgets_color {
 	background-color: #FFF;
+}
+
+.widgets_label_color {
+	color: #000;
 }
 
 .widgets_height {

@@ -3,43 +3,43 @@
        <forms >
 		<form id="pilot" >
 			<script type="set">
-				uri_params['id'] = data.id;
+				getWindowParams()['id'] = data.id;
 				if (!nextForm) {
 					nextForm = $('div[data-form-id="' + this.id + '"]').next().attr('data-form-id');
 					if (!nextForm) {
 						nextForm = $('div.tab').first().attr('data-form-id');
 					}
 				}
-				loadForm(nextForm);
+				loadPage(nextForm + ".html", {});
 				nextForm = '';
 			</script>
 			<script type="error">
 				nextForm = '';
 			</script>
 
-			<form_item type="info" width="1035px"  id="current_date" name="Currtent date" api="ABOUT_ME"/>
+			<form_item type="info" width="100%"  id="current_date" name="Currtent date" api="ABOUT_ME"/>
 
 			<group id="about_me" name="About me">
-				<form_item type="text"                         id="first_name"                 name="First name"                    width="350px"  api="ABOUT_ME"/>
-				<form_item type="text"                         id="last_name"                  name="Last name"                     width="350px"  required="1"  api="ABOUT_ME"/>
-				<form_item type="short_radio_switch"           id="gender"                     name="Gender"                        width="250px"  api="ABOUT_ME"/>
-				<form_item type="checkbox"                     id="name_changed_upon_marriage" name="Name changed upon marriage"    width="201px"  api="ABOUT_ME"/>
-				<form_item type="text"                         id="birth_name"                 name="Birth name"                    width="355px"  api="ABOUT_ME" ajax_visible_parrent="name_changed_upon_marriage"/>
-				<form_item type="auto_complete_editable"                id="social_status_id"           name="Social status"                 width="363px"  required="1" api="ABOUT_ME"/>
-				<form_item type="image"                id="photo"                      name="Photo" width="800px" api="ABOUT_ME"/>
+				<form_item type="text"                         id="first_name"                 name="First name"                    width="35%"  api="ABOUT_ME"/>
+				<form_item type="text"                         id="last_name"                  name="Last name"                     width="35%"  required="1"  api="ABOUT_ME"/>
+				<form_item type="short_radio_switch"           id="gender"                     name="Gender"                        width="30%"  api="ABOUT_ME"/>
+				<form_item type="checkbox"                     id="name_changed_upon_marriage" name="Name changed upon marriage"    width="30%"  api="ABOUT_ME"/>
+				<form_item type="text"                         id="birth_name"                 name="Birth name"                    width="35%"  api="ABOUT_ME" ajax_visible_parrent="name_changed_upon_marriage"/>
+				<form_item type="auto_complete_editable"            id="social_status_id"           name="Social status"                 width="35%"  required="1" api="ABOUT_ME"/>
+				<form_item type="image"                id="photo"   name="Photo" max_size="2048" width="100%" api="ABOUT_ME"/>
 			</group>
 
 			<group id="address" name="Address" parrent_api="ABOUT_ME">
-				<form_item type="auto_complete" id="galaxy"          name="Galaxy"	width="260px"	required="1"  api="ADDRESS"/>
-				<form_item type="auto_complete" id="planet"          name="Planet"	width="260px"	required="1"  api="ADDRESS" ajax_list_parrent="galaxy"/>
-				<form_item type="auto_complete" id="region"          name="Region"	width="260px"	              api="ADDRESS" ajax_list_parrent="galaxy,planet"/>
-				<form_item type="anytext"                id="zip"             name="ZIP" 	width="150px"   required="1" maxlength="11"   api="ADDRESS" ajax_value_parrent="galaxy,planet,region"/>
+				<form_item type="auto_complete" id="galaxy"          name="Galaxy"	width="25%"	required="1"  api="ADDRESS"/>
+				<form_item type="auto_complete" id="planet"          name="Planet"	width="25%"	required="1"  api="ADDRESS" ajax_list_parrent="galaxy"/>
+				<form_item type="auto_complete" id="region"          name="Region"	width="25%"	              api="ADDRESS" ajax_list_parrent="galaxy,planet"/>
+				<form_item type="anytext"                id="zip"             name="ZIP" 	width="25%"   required="1" maxlength="11"   api="ADDRESS" ajax_value_parrent="galaxy,planet,region"/>
 			</group>
 
 
 			<group id="multipass" name="Multipass" parrent_api="ABOUT_ME">
-				<form_item type="short_radio_switch" id="has_multipass" width="200px" name="Has multipass" required="1"                 api="MULTIPASS" />
-				<form_item type="text"               id="multipass_id"  width="255px" name="Multipass ID"  required="1"  maxlength="14" api="MULTIPASS"  ajax_visible_parrent="has_multipass">
+				<form_item type="short_radio_switch" id="has_multipass" width="50%" name="Has multipass" required="1"                 api="MULTIPASS" />
+				<form_item type="text"               id="multipass_id"  width="50%" name="Multipass ID"  required="1"  maxlength="14" api="MULTIPASS"  ajax_visible_parrent="has_multipass">
 					<script type="blur"><![CDATA[
 	        			var rn = this.value; 
 		        		if (rn.match(/\w-\d{7}/)) {
@@ -52,14 +52,14 @@
 			</group>
 
 			<group id="spaceships" name="Spaceship" is_multiplie="true" parrent_api="ABOUT_ME" api="SPACESHIP">
-				<form_item type="auto_complete" id="spaceship_galaxy"          name="Production galaxy"	width="450px"	required="1"  />
-				<form_item type="auto_complete" id="spaceship_planet"          name="Production planet"	width="450px"	required="1"  ajax_list_parrent="spaceship_galaxy" />
+				<form_item type="auto_complete" id="spaceship_galaxy"          name="Production galaxy"	width="50%"	required="1"  />
+				<form_item type="auto_complete" id="spaceship_planet"          name="Production planet"	width="50%"	required="1"  ajax_list_parrent="spaceship_galaxy" />
 
-				<form_item type="popup_list"             id="spaceship_factory"         name="Spaceship factory"	width="990px"	required="1"  ajax_list_parrent="spaceship_galaxy,spaceship_planet" />
+				<form_item type="popup_list"             id="spaceship_factory"         name="Spaceship factory"	width="100%"	required="1"  ajax_list_parrent="spaceship_galaxy,spaceship_planet" />
 				
-				<form_item type="short_radio_switch"     id="engine_type"    name="Engine type" width="990px"   ajax_list_parrent="spaceship_galaxy,spaceship_planet,spaceship_factory" ajax_visible_parrent="spaceship_galaxy,spaceship_planet,spaceship_factory"/>
+				<form_item type="short_radio_switch"     id="engine_type"    name="Engine type" width="100%"   ajax_list_parrent="spaceship_galaxy,spaceship_planet,spaceship_factory" ajax_visible_parrent="spaceship_galaxy,spaceship_planet,spaceship_factory"/>
 
-				<form_item type="file" accept="application/pdf,image/jpg,image/jpeg,image/gif,image/bmp" id="document" name="Sales Certificate" width="600px" />
+				<form_item type="file" accept="application/pdf,image/jpg,image/jpeg,image/gif,image/bmp" id="document" max_size="2048" name="Sales Certificate" width="100%" />
 
 			</group>
 		</form>

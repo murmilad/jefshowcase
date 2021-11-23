@@ -15,6 +15,7 @@ import com.technology.jef.server.exceptions.ServiceException;
 import com.technology.jef.server.dto.RecordDto;
 import com.technology.jef.server.form.Field;
 import com.technology.jef.server.form.Form;
+import com.technology.showcase.dao.EngineTypeDao;
 import com.technology.showcase.dao.EngineTypeFactoryDao;
 import com.technology.showcase.dao.FactoryDao;
 import com.technology.showcase.dao.GalaxyDao;
@@ -31,14 +32,14 @@ public class SpaceshipForm extends Form {
 	public Map<String, Field> getFieldsMap() {
 
 		return new HashMap<String, Field>(){{
-			put("spaceship_galaxy", new Field(SPACESHIP_GALAXY) {{
+			put("spaceship_galaxy", new Field(SPACESHIP_GALAXY, GalaxyDao.NAME) {{
 
 				getListListener((String parameterName, Parameters parameters) -> {
 					GalaxyDao galaxyDao = new GalaxyDao();
 					return  galaxyDao.getOptions();
 				});
 			}});
-			put("spaceship_planet", new Field(SPACESHIP_PLANET) {{
+			put("spaceship_planet", new Field(SPACESHIP_PLANET, PlanetDao.NAME) {{
 
 				getListInteractiveListener((String parameterName, Parameters parameters) -> {
 					PlanetDao planetDao = new PlanetDao();
@@ -47,7 +48,7 @@ public class SpaceshipForm extends Form {
 					}});
 				});
 			}});
-			put("spaceship_factory", new Field(SPACESHIP_FACTORY) {{
+			put("spaceship_factory", new Field(SPACESHIP_FACTORY, FactoryDao.NAME) {{
 
 				getListInteractiveListener((String parameterName, Parameters parameters) -> {
 					FactoryDao factoryDao = new FactoryDao();
@@ -56,7 +57,7 @@ public class SpaceshipForm extends Form {
 					}});
 				});
 			}});
-			put("engine_type", new Field(ENGINE_TYPE) {{
+			put("engine_type", new Field(ENGINE_TYPE, EngineTypeDao.NAME) {{
 
 				getListInteractiveListener((String parameterName, Parameters parameters) -> {
 					EngineTypeFactoryDao engineTypeFactoryDao = new EngineTypeFactoryDao();
@@ -85,41 +86,43 @@ public class SpaceshipForm extends Form {
 
 
 	@Override
-	public void load(Integer primaryId, Integer secondaryId, Parameters parameters) throws ServiceException {
+	public void load(String primaryId, String secondaryId,Parameters parameters) throws ServiceException {
 
 		SpaceshipDao spaceshipDao = new SpaceshipDao();
 
-		setFormData(spaceshipDao.load(secondaryId));
+		if (secondaryId != null) {
+			setFormData(spaceshipDao.load(Integer.parseInt(secondaryId)));
+		}
 	}
 
 
 	@Override
-	public Integer saveForm(Integer primaryId, Integer secondaryId, Parameters parameters)
+	public String saveForm(String primaryId, String secondaryId, Parameters parameters)
 			throws ServiceException {
 
 		SpaceshipDao spaceshipDao = new SpaceshipDao();
 
 		RecordDto record = mapDaoParameters(parameters);
 		record.put(APPLICATION_ID, Objects.toString(primaryId, ""));
-		spaceshipDao.update(record, secondaryId);
+		spaceshipDao.update(record, secondaryId == null ? null : Integer.parseInt(secondaryId));
 		
 		return primaryId;
 	}
 
 	@Override
-	public void deleteForm(Integer primaryId, Integer secondaryId, Parameters parameters)
+	public void deleteForm(String primaryId, String secondaryId, Parameters parameters)
 			throws ServiceException {
 
 		SpaceshipDao spaceshipDao = new SpaceshipDao();
 
-		spaceshipDao.delete(secondaryId);
+		spaceshipDao.delete(Integer.parseInt(secondaryId));
 		
 	}
 
 	
 	
 	@Override
-	public List<String> getGroups(Integer primaryId, Parameters parameters) throws ServiceException {
+	public List<String> getGroups(String primaryId, Parameters parameters) throws ServiceException {
 		SpaceshipDao spaceshipDao = new SpaceshipDao();
 
 		RecordDto record = new RecordDto();

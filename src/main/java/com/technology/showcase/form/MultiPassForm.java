@@ -59,19 +59,20 @@ public class MultiPassForm extends Form {
 	}
 
 	@Override
-	public void load(Integer applicationId, Integer secondaryId, Parameters parameters) throws ServiceException {
+	public void load(String applicationId, String secondaryId,Parameters parameters) throws ServiceException {
 		MultiPassDao multiPassDao = new MultiPassDao();
 
-		setFormData(multiPassDao.load(applicationId));
+		if (applicationId != null) {
+			setFormData(multiPassDao.load(Integer.parseInt(applicationId)));
+		}
 	}
 
-
 	@Override
-	public Integer saveForm(Integer primaryId, Integer secondaryId, Parameters parameters)
+	public String saveForm(String primaryId, String secondaryId, Parameters parameters)
 			throws ServiceException {
 		MultiPassDao multiPassDao = new MultiPassDao();
 
-		return multiPassDao.update(mapDaoParameters(parameters), primaryId);
+		return multiPassDao.update(mapDaoParameters(parameters), primaryId == null ? null : Integer.parseInt(primaryId)).toString();
 	}	
 
 }

@@ -76,14 +76,14 @@ public class FormWebService{
 	
 		Map<String,String> parametersMap = listToMap(parameters);
 	
-		Integer id = parametersMap.get("uri_id") != null ? Integer.valueOf(parametersMap.get("uri_id")) : null; 
+		String id = parametersMap.get("uri_id"); 
 	
 		FormDto interfaceData = null;
 		try {
 			interfaceData =  service.getFormDto(id, formApi, parametersMap);
 		} catch ( ServiceException e) {
 			if (e.getCause() instanceof IllegalArgumentException) {
-				interfaceData = new FormDto(new ErrorDto(INCORRECT_PARAMETER_ERROR_CODE, e.getMessage()));
+				interfaceData = new FormDto(new ErrorDto(ErrorDto.ErrorType.INCORRECT_PARAMETER_ERROR_CODE, e.getMessage()));
 			} else {
 				throw new ServiceException(e.getMessage(),e);
 			}
@@ -117,7 +117,7 @@ public class FormWebService{
 	
 		Map<String,String> parametersMap = listToMap(parameters);
 	
-		Integer id = parametersMap.get("uri_id") != null ? Integer.valueOf(parametersMap.get("uri_id")) : null; 
+		String id = parametersMap.get("uri_id"); 
 	
 		ListDto<ListItemDto> listData = null;
 		try {
@@ -125,7 +125,7 @@ public class FormWebService{
 			
 		} catch ( ServiceException e) {
 			if (e.getCause() instanceof IllegalArgumentException) {
-				listData = new ListDto<ListItemDto>(new ErrorDto(INCORRECT_PARAMETER_ERROR_CODE, e.getMessage()));
+				listData = new ListDto<ListItemDto>(new ErrorDto(ErrorDto.ErrorType.INCORRECT_PARAMETER_ERROR_CODE, e.getMessage()));
 			} else {
 				throw new ServiceException(e.getMessage(),e);
 			}
@@ -157,7 +157,7 @@ public class FormWebService{
 	
 		Map<String,String> parametersMap = listToMap(parameters);
 	
-		Integer id = parametersMap.get("uri_id") != null ? Integer.valueOf(parametersMap.get("uri_id")) : null; 
+		String id = parametersMap.get("uri_id"); 
 	
 		ResultDto result = null;
 		try {
@@ -165,7 +165,7 @@ public class FormWebService{
 			result = service.setFormData(id, parametersMap);
 		} catch ( ServiceException e) {
 			if (e.getCause() instanceof IllegalArgumentException) {
-				result = new ResultDto(new ErrorDto(INCORRECT_PARAMETER_ERROR_CODE, e.getMessage()));
+				result = new ResultDto(new ErrorDto(ErrorDto.ErrorType.INCORRECT_PARAMETER_ERROR_CODE, e.getMessage()));
 			} else {
 				throw new ServiceException(e.getMessage(),e);
 			}
@@ -200,7 +200,7 @@ public class FormWebService{
 	
 		Map<String,String> parametersMap = listToMap(parameters);
 	
-		Integer id = parametersMap.get("uri_id") != null ? Integer.valueOf(parametersMap.get("uri_id")) : null; 
+		String id = parametersMap.get("uri_id"); 
 	
 	
 		ListDto<ListItemDto> listData = null;
@@ -209,7 +209,7 @@ public class FormWebService{
 			
 		} catch ( ServiceException e) {
 			if (e.getCause() instanceof IllegalArgumentException) {
-				listData = new ListDto<ListItemDto>(new ErrorDto(INCORRECT_PARAMETER_ERROR_CODE, e.getMessage()));
+				listData = new ListDto<ListItemDto>(new ErrorDto(ErrorDto.ErrorType.INCORRECT_PARAMETER_ERROR_CODE, e.getMessage()));
 			} else {
 				throw new ServiceException(e.getMessage(),e);
 			}
@@ -250,7 +250,7 @@ public class FormWebService{
 	
 		Map<String,String> parametersMap = listToMap(parameters);
 	
-		Integer id = parametersMap.get("uri_id") != null ? Integer.valueOf(parametersMap.get("uri_id")) : null; 
+		String id = parametersMap.get("uri_id"); 
 	
 		ValueDto<String> valueData = null;
 		try {
@@ -258,7 +258,7 @@ public class FormWebService{
 			
 		} catch ( ServiceException e) {
 			if (e.getCause() instanceof IllegalArgumentException) {
-				valueData = new ValueDto<String>(new ErrorDto(INCORRECT_PARAMETER_ERROR_CODE, e.getMessage()));
+				valueData = new ValueDto<String>(new ErrorDto(ErrorDto.ErrorType.INCORRECT_PARAMETER_ERROR_CODE, e.getMessage()));
 			} else {
 				throw new ServiceException(e.getMessage(),e);
 			}
@@ -293,7 +293,7 @@ public class FormWebService{
 	
 		Map<String,String> parametersMap = listToMap(parameters);
 	
-		Integer id = parametersMap.get("uri_id") != null ? Integer.valueOf(parametersMap.get("uri_id")) : null; 
+		String id = parametersMap.get("uri_id"); 
 	
 		ValueDto<Boolean> valueData = null;
 		try {
@@ -301,7 +301,7 @@ public class FormWebService{
 			
 		} catch ( ServiceException e) {
 			if (e.getCause() instanceof IllegalArgumentException) {
-				valueData = new ValueDto<Boolean>(new ErrorDto(INCORRECT_PARAMETER_ERROR_CODE, e.getMessage()));
+				valueData = new ValueDto<Boolean>(new ErrorDto(ErrorDto.ErrorType.INCORRECT_PARAMETER_ERROR_CODE, e.getMessage()));
 			} else {
 				throw new ServiceException(e.getMessage(),e);
 			}
@@ -335,7 +335,7 @@ public class FormWebService{
 	
 		Map<String,String> parametersMap = listToMap(parameters);
 	
-		Integer id = parametersMap.get("uri_id") != null ? Integer.valueOf(parametersMap.get("uri_id")) : null; 
+		String id = parametersMap.get("uri_id"); 
 	
 		ValueDto<Boolean> valueData = null;
 		try {
@@ -343,7 +343,7 @@ public class FormWebService{
 			
 		} catch ( ServiceException e) {
 			if (e.getCause() instanceof IllegalArgumentException) {
-				valueData = new ValueDto<Boolean>(new ErrorDto(INCORRECT_PARAMETER_ERROR_CODE, e.getMessage()));
+				valueData = new ValueDto<Boolean>(new ErrorDto(ErrorDto.ErrorType.INCORRECT_PARAMETER_ERROR_CODE, e.getMessage()));
 			} else {
 				throw new ServiceException(e.getMessage(),e);
 			}

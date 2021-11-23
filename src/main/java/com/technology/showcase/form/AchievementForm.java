@@ -67,11 +67,11 @@ public class AchievementForm extends Form {
 
 
 	@Override
-	public void load(Integer primaryId, Integer secondaryId, Parameters parameters) throws ServiceException {
+	public void load(String primaryId, String secondaryId,Parameters parameters) throws ServiceException {
 
 		AchievementPilotDao achievementPilotDao = new AchievementPilotDao();
 
-		RecordDto achievementPilot = achievementPilotDao.load(secondaryId);
+		RecordDto achievementPilot = achievementPilotDao.load(Integer.parseInt(secondaryId));
 		setFormData(achievementPilot);
 		
 		ReasonAchievementPilotDao reasonAchievementPilotDao = new ReasonAchievementPilotDao();
@@ -83,25 +83,25 @@ public class AchievementForm extends Form {
 			getFormData().putValue("about", (String) achievement.get(AchievementTypeDao.ABOUT));
 			getFormData().putValue("image",  "<img src='" +  achievement.get(AchievementTypeDao.IMAGE) + "' />");
 		}
-		getFormData().putValue("reason", Service.getListData(() -> reasonAchievementPilotDao.loadList(secondaryId)));
+		getFormData().putValue("reason", Service.getListData(() -> reasonAchievementPilotDao.loadList(Integer.parseInt(secondaryId))));
 	}
 
 
 	@Override
-	public Integer saveForm(Integer primaryId, Integer secondaryId, Parameters parameters)
+	public String saveForm(String primaryId, String secondaryId, Parameters parameters)
 			throws ServiceException {
 
 		AchievementPilotDao achievementPilot = new AchievementPilotDao();
 
 		RecordDto record = mapDaoParameters(parameters);
 		record.put(AchievementPilotDao.PILOT_ID, Objects.toString(primaryId, ""));
-		final Integer newSecondaryId = achievementPilot.update(record, secondaryId);
+		final Integer newSecondaryId = achievementPilot.update(record, Integer.parseInt(secondaryId));
 
 		ReasonAchievementPilotDao reasonAchievementPilotDao = new ReasonAchievementPilotDao();
 		
 		Service.setListData(parameters.getValue("reason")
 				, (String id) -> reasonAchievementPilotDao.create(id, secondaryId != null ? String.valueOf(secondaryId) : String.valueOf(newSecondaryId))
-				, () -> reasonAchievementPilotDao.deleteList(secondaryId)
+				, () -> reasonAchievementPilotDao.deleteList(Integer.parseInt(secondaryId))
 				);
 		
 				
@@ -109,21 +109,21 @@ public class AchievementForm extends Form {
 	}
 
 	@Override
-	public void deleteForm(Integer primaryId, Integer secondaryId, Parameters parameters)
+	public void deleteForm(String primaryId, String secondaryId, Parameters parameters)
 			throws ServiceException {
 
 		AchievementPilotDao achievementPilot = new AchievementPilotDao();
 		ReasonAchievementPilotDao reasonAchievementPilotDao = new ReasonAchievementPilotDao();
 
-		achievementPilot.delete(secondaryId);
-		reasonAchievementPilotDao.deleteList(secondaryId);
+		achievementPilot.delete(Integer.parseInt(secondaryId));
+		reasonAchievementPilotDao.deleteList(Integer.parseInt(secondaryId));
 		
 	}
 
 	
 	
 	@Override
-	public List<String> getGroups(Integer primaryId, Parameters parameters) throws ServiceException {
+	public List<String> getGroups(String primaryId, Parameters parameters) throws ServiceException {
 		AchievementPilotDao achievementPilot = new AchievementPilotDao();
 
 		RecordDto record = new RecordDto();

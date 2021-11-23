@@ -3,14 +3,14 @@
        <forms >
 		<form id="achievements" >
 			<script type="set">
-				uri_params['id'] = data.id;
+				getWindowParams()['id'] = data.id;
 				if (!nextForm) {
 					nextForm = $('div[data-form-id="' + this.id + '"]').next().attr('data-form-id');
 					if (!nextForm) {
 						nextForm = $('div.tab').first().attr('data-form-id');
 					}
 				}
-				loadForm(nextForm);
+				loadPage(nextForm + ".html", {});
 				nextForm = '';
 			</script>
 			<script type="error">
@@ -18,11 +18,11 @@
 			</script>
 
 			<group id="achievements" name="Achievement" is_multiplie="true" api="ACHIEVEMENT">
-				<form_item type="popup_list" id="type" name="Type" required="1" width="900px" />
-				<form_item type="label"      id="about" name="" width="200px"  ajax_value_parrent="type" />
-				<form_item type="label"      id="image" name="" width="150px"  ajax_value_parrent="type" />
-				<form_item type="short_checkbox_list"  id="reason" required="1" name="Reason" width="900px"  />
-				<form_item type="number"     id="score" name="Score" required="1" width="900px"   />
+				<form_item type="popup_list" id="type" name="Type" required="1" width="100%" />
+				<form_item type="label"      id="about" name="" width="50%"  ajax_value_parrent="type" />
+				<form_item type="label"      id="image" name="" width="50%"  ajax_value_parrent="type" />
+				<form_item type="short_checkbox_list"  id="reason" required="1" name="Reason" width="100%"  />
+				<form_item type="number"     id="score" name="Score" required="1" width="100%"   />
 			</group>
 		</form>
 
