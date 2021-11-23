@@ -29,9 +29,9 @@ public class AchievementForm extends Form {
 	public Map<String, Field> getFieldsMap() {
 
 		return new HashMap<String, Field>(){{
-			put("type", new Field(AchievementPilotDao.ACHIEVEMENT_ID) {{
+			put("type", new Field(AchievementPilotDao.ACHIEVEMENT_ID, AchievementTypeDao.NAME) {{
 
-				getListListener((String parameterName, Parameters parameters) -> {
+				getListInteractiveListener((String parameterName, Parameters parameters) -> {
 					AchievementTypeDao achievementTypeDao = new AchievementTypeDao();
 					return  achievementTypeDao.getOptions();
 				});
@@ -71,19 +71,22 @@ public class AchievementForm extends Form {
 
 		AchievementPilotDao achievementPilotDao = new AchievementPilotDao();
 
-		RecordDto achievementPilot = achievementPilotDao.load(Integer.parseInt(secondaryId));
-		setFormData(achievementPilot);
-		
-		ReasonAchievementPilotDao reasonAchievementPilotDao = new ReasonAchievementPilotDao();
+		if (secondaryId != null) {
+			RecordDto achievementPilot = achievementPilotDao.load(Integer.parseInt(secondaryId));
+			setFormData(achievementPilot);
+			
+			ReasonAchievementPilotDao reasonAchievementPilotDao = new ReasonAchievementPilotDao();
 
-		if (achievementPilot.get(AchievementPilotDao.ACHIEVEMENT_ID) != null && !"".equals(achievementPilot.get(AchievementPilotDao.ACHIEVEMENT_ID))) {
-			AchievementTypeDao achievementTypeDao = new AchievementTypeDao();
-			RecordDto achievement = achievementTypeDao.load(Integer.parseInt(((String)achievementPilot.get(AchievementPilotDao.ACHIEVEMENT_ID)).split(PARAMETER_NAME_VALUE_SEPARATOR)[0]));
-	
-			getFormData().putValue("about", (String) achievement.get(AchievementTypeDao.ABOUT));
-			getFormData().putValue("image",  "<img src='" +  achievement.get(AchievementTypeDao.IMAGE) + "' />");
+			if (achievementPilot.get(AchievementPilotDao.ACHIEVEMENT_ID) != null && !"".equals(achievementPilot.get(AchievementPilotDao.ACHIEVEMENT_ID))) {
+				AchievementTypeDao achievementTypeDao = new AchievementTypeDao();
+				RecordDto achievement = achievementTypeDao.load(Integer.parseInt(((String)achievementPilot.get(AchievementPilotDao.ACHIEVEMENT_ID)).split(PARAMETER_NAME_VALUE_SEPARATOR)[0]));
+		
+				getFormData().putValue("about", (String) achievement.get(AchievementTypeDao.ABOUT));
+				getFormData().putValue("image",  "<img src='" +  achievement.get(AchievementTypeDao.IMAGE) + "' />");
+			}
+			getFormData().putValue("reason", Service.getListData(() -> reasonAchievementPilotDao.loadList(Integer.parseInt(secondaryId))));
+
 		}
-		getFormData().putValue("reason", Service.getListData(() -> reasonAchievementPilotDao.loadList(Integer.parseInt(secondaryId))));
 	}
 
 
@@ -95,13 +98,13 @@ public class AchievementForm extends Form {
 
 		RecordDto record = mapDaoParameters(parameters);
 		record.put(AchievementPilotDao.PILOT_ID, Objects.toString(primaryId, ""));
-		final Integer newSecondaryId = achievementPilot.update(record, Integer.parseInt(secondaryId));
+		final Integer newSecondaryId = achievementPilot.update(record, secondaryId == null ? null : Integer.parseInt(secondaryId));
 
 		ReasonAchievementPilotDao reasonAchievementPilotDao = new ReasonAchievementPilotDao();
 		
 		Service.setListData(parameters.getValue("reason")
 				, (String id) -> reasonAchievementPilotDao.create(id, secondaryId != null ? String.valueOf(secondaryId) : String.valueOf(newSecondaryId))
-				, () -> reasonAchievementPilotDao.deleteList(Integer.parseInt(secondaryId))
+				, () -> reasonAchievementPilotDao.deleteList(secondaryId == null ? null : Integer.parseInt(secondaryId))
 				);
 		
 				

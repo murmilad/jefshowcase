@@ -10,7 +10,7 @@
 						nextForm = $('div.tab').first().attr('data-form-id');
 					}
 				}
-				loadPage(nextForm + ".html", {});
+				loadFormTab(nextForm);
 				nextForm = '';
 			</script>
 			<script type="error">
